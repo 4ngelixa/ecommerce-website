@@ -1,4 +1,4 @@
-#INF1005 Web Systems and Technologies Project
+#INF1005 Web Systems and Technologies Project#
 
 Done by: LAB-P5 Group 9
 Angelica Sim (2303099)
