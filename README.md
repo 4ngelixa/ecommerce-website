@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-#INF1005 Web Systems and Technologies Project#
-=======
 =======
 # INF1005 Web Systems and Technologies Project
->>>>>>> origin/main
 
 Done by: LAB-P5 Group 9 <br>
 Angelica Sim (2303099) <br>
