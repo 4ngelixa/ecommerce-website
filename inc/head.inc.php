@@ -8,4 +8,6 @@
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
         crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
+    <link rel = "stylesheet" href = "css/login.css">
+    <title>Bling Bling</title>
 </head>

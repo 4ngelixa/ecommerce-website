@@ -86,7 +86,7 @@
         } else {
             echo "<h4>The following input errors were detected:</h4>";
             echo "<p>" . $errorMsg . "</p>";
-            echo "<button class='btn btn-danger' type='redirect'onclick=\"location.href='register.php'\">Return to Sign Up</button>";
+            echo "<button class='btn btn-danger' type='redirect'onclick=\"location.href='authentication.php'\">Return to Sign Up</button>";
         }
 
 
@@ -128,7 +128,7 @@
                 );
 
                 // Prepare the statement
-                $stmt = $conn->prepare("INSERT INTO world_of_pets_members (fname, lname, email, password) VALUES (?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO bling_bling_member (fname, lname, email, password) VALUES (?, ?, ?, ?)");
 
                 // Bind & execute the query statement
                 $stmt->bind_param("ssss", $fname, $lname, $email, $pwd);

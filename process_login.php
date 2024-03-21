@@ -66,7 +66,7 @@
             echo "<h2>Oops!</h2>";
             echo "<h4>The following input errors were detected:</h4>";
             echo "<p> $errorMsg </p>";
-            echo "<button class='btn btn-warning' type='redirect'onclick=\"location.href='\\login.php'\">Return to Login</button>";
+            echo "<button class='btn btn-warning' type='redirect'onclick=\"location.href='\\authentication.php'\">Return to Login</button>";
         }
 
 
@@ -107,7 +107,7 @@
                     $success = false;
                 } else {
                     // Prepare the statement:
-                    $stmt = $conn->prepare("SELECT * FROM world_of_pets.world_of_pets_members WHERE email=?");
+                    $stmt = $conn->prepare("SELECT * FROM inf1005_bling_bling.bling_bling_member WHERE email=?");
                     // Bind & execute the query statement:
                     $stmt->bind_param("s", $email);
                     $stmt->execute();

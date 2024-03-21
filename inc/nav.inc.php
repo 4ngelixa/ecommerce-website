@@ -22,7 +22,7 @@
                 </li>
             </ul>
             <div class="d-flex">
-                <a class="nav-link" href="register.php">
+                <a class="nav-link" href="authentication.php">
                     <i class="fas fa-sign-in-alt"></i> 
                 </a>
             </div>
