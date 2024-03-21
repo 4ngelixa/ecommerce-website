@@ -107,7 +107,7 @@
                     $success = false;
                 } else {
                     // Prepare the statement:
-                    $stmt = $conn->prepare("SELECT * FROM inf1005_bling_bling.bling_bling_member WHERE email=?");
+                    $stmt = $conn->prepare("SELECT * FROM inf1005_bling_bling.member WHERE email=?");
                     // Bind & execute the query statement:
                     $stmt->bind_param("s", $email);
                     $stmt->execute();
