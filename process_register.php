@@ -128,7 +128,7 @@
                 );
 
                 // Prepare the statement
-                $stmt = $conn->prepare("INSERT INTO bling_bling_member (fname, lname, email, password) VALUES (?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO member (fname, lname, email, password) VALUES (?, ?, ?, ?)");
 
                 // Bind & execute the query statement
                 $stmt->bind_param("ssss", $fname, $lname, $email, $pwd);
