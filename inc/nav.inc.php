@@ -16,13 +16,13 @@
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Products</a>
+                    <a class="nav-link" href="products.php">Products</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="venue.php">Venues</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About Us</a>
+                    <a class="nav-link" href="about_us.php">About Us</a>
                 </li>
             </ul>
             <div class="d-flex">

@@ -1,3 +1,9 @@
+<head>
+    <?php
+    include "inc/head.inc.php";
+    ?>
+</head>
+
 <?php
 // Database connection variables
 $servername = "35.212.131.157";
