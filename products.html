@@ -1,0 +1,107 @@
+<!-- Test code --> 
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bling Bling Badminton Products</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            text-align: center;
+            color: #333;
+            padding: 20px 0;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .products-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .product {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            flex: 0 1 calc(20% - 20px);
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .product-name {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 800px) {
+            .product {
+                flex: 0 1 calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .product {
+                flex: 0 1 calc(100% - 20px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Bling Bling Badminton Products</h1>
+    </div>
+
+    <div class="products-container">
+        <div class="product">
+            <img src="images/net.png" alt="Net">
+            <div class="product-name">Net</div>
+        </div>
+
+        <div class="product">
+            <img src="images/racket.png" alt="Racket">
+            <div class="product-name">Racket</div>
+        </div>
+
+        <div class="product">
+            <img src="images/shuttlecocks.jpg" alt="Shuttlecocks">
+            <div class="product-name">Shuttlecocks</div>
+        </div>
+
+        <div class="product">
+            <img src="images/towel.png" alt="Towel">
+            <div class="product-name">Towel</div>
+        </div>
+
+        <div class="product">
+            <img src="images/wristband.png" alt="Wristband">
+            <div class="product-name">Wristband</div>
+        </div>
+    </div>
+
+</body>
+
+</html>

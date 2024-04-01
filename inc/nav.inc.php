@@ -16,7 +16,7 @@
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link" href="products.php">Products</a>
+                    <a class="nav-link" href="products.html">Products</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="venue.php">Venues</a>
