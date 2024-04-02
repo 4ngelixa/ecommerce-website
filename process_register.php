@@ -37,17 +37,6 @@
             }
         }
 
-        //First Name (Not required)
-        /*
-        if (empty($_POST["fname"])) {
-            $errorMsg .= "Name is required.<br>";
-            $success = false;
-        } else {
-            $fname = sanitize_input($_POST["fname"]);
-        }
-        */
-        $fname = sanitize_input($_POST["fname"]);
-
         //Last Name
         if (empty($_POST["lname"])) {
             $errorMsg .= "Last Name is required.<br>";

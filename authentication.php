@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     <?php
     include "inc/head.inc.php";
@@ -29,7 +32,7 @@
 				</div>
 				<div class="hr"></div>
 				<div class="foot-lnk">
-					<a href="#forgot">Forgot Password?</a>
+					<a href="forget_pass.php">Forgot Password?</a>
 				</div>
 			</div>
         </form>
@@ -52,7 +55,7 @@
 
                 <div class="mb-3">
                     <label for="pwd" class="form-label">Password:</label>
-                    <input required type="password" id="pwd" name="pwd" class="form-control" placeholder="Enter password">
+                    <input required type="password" id="pwd1" name="pwd" class="form-control" placeholder="Enter password">
                 </div>
 
                 <div class="mb-3">
@@ -81,3 +84,4 @@
     include "inc/footer.inc.php";
     ?>
 </body>
+</html>

@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <?php session_start(); ?>
 <head>
     <?php
@@ -43,3 +46,4 @@
     include "inc/footer.inc.php";
     ?>
 </body>
+</html>
