@@ -15,7 +15,6 @@
     <link rel = "stylesheet" href = "css/login.css">
     <link rel = "stylesheet" href = "css/navbar.css">
 
-
     <script defer src="js/navbar.js"></script>
     <script defer src="js/mains.js"></script> 
 

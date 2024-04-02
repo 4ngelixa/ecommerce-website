@@ -2,7 +2,10 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
- ?>
+
+// Get the number of items in the shopping cart, which will be displayed in the header.
+$num_items_in_cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+?>
 
 <nav id="Navbar" class="navbar navbar-expand-sm navbar-dark sticky-top">
     <!-- Logo -->
@@ -21,27 +24,29 @@ if (session_status() === PHP_SESSION_NONE) {
     </span>
 
     <?php 
-            if (isset($_SESSION['lname'])){
-                echo'
-                <!-- Side Nav Menu -->
-                <div id="mySidenav" class="sidenav">
-                    <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
-                    <a href="/profile.php"> <i class="fa-solid fa-lock"></i> Profile</a>
-                    <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i>Sign Out</a>
-                    <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
-                </div>
-                ';} 
-                else{
-                    echo'
-                    <!-- Side Nav Menu -->
-                    <div id="mySidenav" class="sidenav">
-                        <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
-                        <a href="/authentication.php"> <i class="fa-solid fa-lock"></i> Login</a>
-                        <a href="/authentication.php"><i class="fa-solid fa-sign-hanging"> </i>Sign Up</a>
-                        <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
-                    </div>
-                    ';
-                }
-                ?>
+    if (isset($_SESSION['lname'])) {
+        echo '
+        <!-- Side Nav Menu -->
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
+            <a href="/profile.php"> <i class="fa-solid fa-lock"></i> Profile</a>
+            <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i> Sign Out</a>
+            <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+            <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
 
+        </div>
+        ';
+    } else {
+        echo '
+        <!-- Side Nav Menu -->
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
+            <a href="/authentication.php"> <i class="fa-solid fa-lock"></i> Login</a>
+            <a href="/authentication.php"><i class="fa-solid fa-sign-hanging"> </i> Sign Up</a>
+            <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+            <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
+        </div>
+        ';
+    }
+    ?>
 </nav>

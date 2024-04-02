@@ -1,0 +1,262 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container{
+    width: 400px;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1),
+                0 5px 12px -2px rgba(0, 0, 0, 0.1),
+                0 18px 36px -6px rgba(0, 0, 0, 0.1);
+}
+
+.container .title{
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container form input{
+    display: none;
+}
+
+.container form .category{
+    margin-top: 10px;
+    padding-top: 20px;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 15px;
+}
+
+.category label{
+    /* width: 100%; */
+    /* height: 65px; */
+    height: 145px;
+    padding: 20px;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    display: flex;
+    /* justify-content: space-between; */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+}
+
+#creditcard:checked ~ .category .creditMethod,
+#grabpay:checked ~ .category .grabpayMethod,
+#paypal:checked ~ .category .paypalMethod,
+#googlepay:checked ~ .category .googlepayMethod{
+    box-shadow: 0px 0px 0px 1px #6064b6;
+}
+
+
+#creditcard:checked ~ .category .creditMethod,
+#grabpay:checked ~ .category .grabpayMethod,
+#paypal:checked ~ .category .paypalMethod,
+#googlepay:checked ~ .category .googlepayMethod{
+    display: block;
+}
+
+label .imgName{
+    display: flex;
+    /* justify-content: space-between;
+     */
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.imgName span{
+    /* margin-left: 20px; */
+    font-family: Arial, Helvetica, sans-serif;
+
+    position: absolute;
+    top: 72%;
+    transform: translateY(-72%);
+}
+
+.imgName .imgContainer{
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: 35%;
+    transform: translateY(-35%);
+}
+
+img{
+    width: 50px;
+    height: auto;
+}
+
+.credit img{
+    width: 70px;
+    /* margin-left: 5px; */
+}
+
+.grabpay img{
+    width: 65px;
+}
+
+.paypal img{
+    width: 80px;
+}
+
+.googlepay img{
+    width: 50px;
+}
+
+.check{
+    display: none;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+}
+
+.check i{
+    font-size: 18px;
+}
+
+.nextButton {
+    margin-top: 20px; /* Adjust the top margin as needed */
+    background-color: cornflowerblue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.nextButton:hover {
+    background-color: #6495ED; /* Change color on hover if needed */
+}
+
+.backButton {
+    margin-top: 20px; /* Adjust the top margin as needed */
+    background-color: cornflowerblue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.backButton:hover {
+    background-color: #6495ED; /* Change color on hover if needed */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Adjusts spacing between buttons */
+}
+
+.nextButton,
+.backButton {
+    width: 25%; /* Set the width of buttons */
+}
+
+/* Cart heading */
+main.container h1 {
+    display: block;
+    font-weight: normal;
+    margin: 0;
+    padding: 40px 0;
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+}
+
+/* Cart items table */
+main.container .cart-items table {
+    width: 100%;
+}
+
+main.container .cart-items table thead th {
+    padding: 30px 0;
+    border-bottom: 1px solid #EEEEEE;
+    text-align: left;
+}
+
+main.container .cart-items table thead th:nth-child(1),
+main.container .cart-items table thead th:nth-child(2) {
+    width: 25%;
+}
+
+main.container .cart-items table thead th:nth-child(3),
+main.container .cart-items table thead th:nth-child(4),
+main.container .cart-items table thead th:nth-child(5) {
+    width: 15%;
+}
+
+main.container .cart-items table tbody td {
+    padding: 20px 0;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+main.container .cart-items table tbody td:nth-child(1),
+main.container .cart-items table tbody td:nth-child(2) {
+    width: 25%;
+}
+
+main.container .cart-items table tbody td:nth-child(3),
+main.container .cart-items table tbody td:nth-child(4),
+main.container .cart-items table tbody td:nth-child(5) {
+    width: 15%;
+}
+
+/* Cart subtotal */
+main.container .subtotal {
+    text-align: right;
+    padding: 40px 0;
+}
+
+main.container .subtotal .text {
+    padding-right: 40px;
+    font-size: 18px;
+}
+
+main.container .subtotal .price {
+    font-size: 18px;
+    color: #999999;
+}
+
+/* Cart buttons */
+main.container .buttons {
+    text-align: right;
+    padding-bottom: 40px;
+}
+
+main.container .buttons input[type="submit"],
+main.container .buttons button {
+    margin-left: 5px;
+    padding: 12px 20px;
+    border: 0;
+    background: #4e5c70;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+main.container .buttons input[type="submit"]:hover,
+main.container .buttons button:hover {
+    background: #434f61;
+}
+
+
