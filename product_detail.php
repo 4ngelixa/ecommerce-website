@@ -1,37 +1,50 @@
-<head>
-    <?php
-    include "inc/head.inc.php";
-    ?>
-</head>
-
 <?php
-// Database connection variables
-$servername = "35.212.131.157";
-$username = "inf1005-dev";
-$password = "ADWXqezc1234";
-$dbname = "inf1005_bling_bling";
+// Initialize error message and success flag
+$errorMsg = '';
+$success = true;
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Create database connection
+$config = parse_ini_file('/var/www/private/db-config.ini');
+if (!$config) {
+    $errorMsg = "Failed to read database config file.";
+    $success = false;
+} else {
+    $conn = new mysqli(
+        $config['servername'],
+        $config['username'],
+        $config['password'],
+        $config['dbname']
+    );
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    // Check connection
+    if ($conn->connect_error) {
+        $errorMsg = "Connection failed: " . $conn->connect_error;
+        $success = false;
+    }
 }
 
-// Safely fetch the product ID from the URL
-$productID = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+if ($success) {
+    // Safely fetch the product ID from the URL
+    $productID = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-// Prepare the SQL statement to prevent SQL injection
-$stmt = $conn->prepare("SELECT pname, pdescription, sku, price, stock FROM Product WHERE product_id = ?");
-$stmt->bind_param("i", $productID);
-$stmt->execute();
-$result = $stmt->get_result();
-$product = $result->fetch_assoc();
+    // Prepare the SQL statement to prevent SQL injection
+    if ($stmt = $conn->prepare("SELECT pname, pdescription, sku, price, stock FROM product WHERE product_id = ?")) {
+        $stmt->bind_param("i", $productID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $product = $result->fetch_assoc();
 
-if (!$product) {
-    echo "Product not found.";
-    exit;
+        if (!$product) {
+            $errorMsg = "Product not found.";
+            $success = false;
+        }
+    } else {
+        $errorMsg = "Failed to prepare the statement.";
+        $success = false;
+    }
+
+    // Close the database connection
+    $conn->close();
 }
 ?>
 
@@ -42,31 +55,133 @@ if (!$product) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= htmlspecialchars($product["pname"]); ?>
+        <?= $success && $product ? htmlspecialchars($product["pname"]) : "Product Not Found"; ?>
     </title>
-    <link rel="stylesheet" href="style.css">
+    <style scoped>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            position: relative;
+        }
+
+        .product-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            align-items: center;
+        }
+
+        .product-image {
+            flex: 1;
+            text-align: center;
+            padding: 30px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 300px;
+        }
+
+        .product-details {
+            flex: 2;
+            margin-left: 20px;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e44d26;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .product-sku,
+        .product-stock {
+            margin-bottom: 5px;
+            color: darkgrey;
+        }
+
+        button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: black;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        
+    </style>
 </head>
 
 <body>
-    <div class="product-detail">
-        <img src="images/<?= strtolower($product["pname"]); ?>.png" alt="<?= htmlspecialchars($product["pname"]); ?>" />
-        <h1>
-            <?= htmlspecialchars($product["pname"]); ?>
-        </h1>
-        <p>Description:
-            <?= nl2br(htmlspecialchars($product["pdescription"])); ?>
+    <?php include "inc/head.inc.php"; ?>
+    <?php include "inc/nav.inc.php"; ?>
+    <?php if ($success && $product): ?>
+        <button class="back-button" onclick="location.href='product_catalogue.php'">Back to Products</button>
+        <div class="product-container">
+            <div class="product-image">
+                <img src="images/<?= strtolower($product["pname"]); ?>.png"
+                    alt="<?= htmlspecialchars($product["pname"]); ?>" />
+            </div>
+            <div class="product-details">
+                <h1>
+                    <?= htmlspecialchars($product["pname"]); ?>
+                </h1>
+                <div class="product-price">$
+                    <?= number_format((float) $product["price"], 2, '.', ''); ?>
+                </div>
+                <br>
+                <div class="product-description">
+                    <?= nl2br(htmlspecialchars($product["pdescription"])); ?>
+                </div>
+                <div class="product-sku">SKU:
+                    <?= htmlspecialchars($product["sku"]); ?>
+                </div>
+                <div class="product-stock">Stock:
+                    <?= htmlspecialchars($product["stock"]); ?> available
+                </div>
+                <br>
+                <button onclick="location.href='payment.php?id=<?= $productID; ?>'">Add to Cart</button>
+            </div>
+        </div>
+    <?php else: ?>
+        <p>
+            <?= $errorMsg ?: "Product not found." ?>
         </p>
-        <p>SKU:
-            <?= htmlspecialchars($product["sku"]); ?>
-        </p>
-        <p>Price: $
-            <?= number_format((float) $product["price"], 2, '.', ''); ?>
-        </p>
-        <p>Stock:
-            <?= htmlspecialchars($product["stock"]); ?> available
-        </p>
-        <button onclick="location.href='payment.php?id=<?= $productID; ?>'">Add to Cart</button>
-    </div>
+    <?php endif; ?>
 </body>
 
 </html>
