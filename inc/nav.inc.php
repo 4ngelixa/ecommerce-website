@@ -29,6 +29,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <a href="/profile.php"> <i class="fa-solid fa-lock"></i> Profile</a>
                     <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i>Sign Out</a>
                     <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+                    <a href="/products.php"> Products</a>
                 </div>
                 ';} 
                 else{

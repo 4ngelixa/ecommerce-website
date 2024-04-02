@@ -1,50 +1,32 @@
-<head>
-    <?php
-    include "inc/head.inc.php";
-    ?>
-</head>
-
 <?php
-// Database connection variables
-// $servername = "35.212.131.157";
-// $username = "inf1005-dev";
-// $password = "ADWXqezc1234";
-// $dbname = "inf1005_bling_bling";
+// Initialize error message and success flag
+$errorMsg = '';
+$success = true;
 
-// try {
-//     $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-//     // Set the PDO error mode to exception
-//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// } catch (PDOException $e) {
-//     die("Connection failed: " . $e->getMessage());
-// }
-
-// Create database connection.
+// Create database connection
 $config = parse_ini_file('/var/www/private/db-config.ini');
 if (!$config) {
-    throw new Exception("Failed to read database config file.");
+    $errorMsg = "Failed to read database config file.";
+    $success = false;
+} else {
+    $conn = new mysqli(
+        $config['servername'],
+        $config['username'],
+        $config['password'],
+        $config['dbname']
+    );
+
+    // Check connection
+    if ($conn->connect_error) {
+        $errorMsg = "Connection failed: " . $conn->connect_error;
+        $success = false;
+    }
 }
 
-$pdo = new mysqli(
-    $config['servername'],
-    $config['username'],
-    $config['password'],
-    $config['dbname']
-);
-
-// Get the product ID from the URL
-$product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-// Fetch product data from the database
-$sql = "SELECT * FROM product WHERE product_id = ?";
-$stmt = $pdo->prepare($sql);
-$stmt->execute([$product_id]);
-$product = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Check if product exists
-if (!$product) {
-    echo "Product not found";
-    exit;
+// Proceed with database operations if successful
+if ($success) {
+    $sql = "SELECT product_id, pname, price FROM Product";
+    $result = $conn->query($sql);
 }
 ?>
 
@@ -62,8 +44,8 @@ if (!$product) {
     <div class="container">
         <h1>Product Catalog</h1>
         <div class="products">
-            <?php if (mysqli_num_rows($result) > 0): ?>
-                <?php while ($row = mysqli_fetch_assoc($result)): ?>
+            <?php if ($success && $result && $result->num_rows > 0): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
                     <div class="product">
                         <img src="images/<?= strtolower($row["pname"]); ?>.png" alt="<?= htmlspecialchars($row["pname"]); ?>" />
                         <h2><a href="product_detail.php?id=<?= $row["product_id"]; ?>">
@@ -75,8 +57,16 @@ if (!$product) {
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
-                <p>No products found.</p>
+                <p>
+                    <?= $errorMsg ?: "No products found." ?>
+                </p>
             <?php endif; ?>
+            <?php
+            // Close the database connection if it was successful
+            if ($success) {
+                $conn->close();
+            }
+            ?>
         </div>
     </div>
 </body>
