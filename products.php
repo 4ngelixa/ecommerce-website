@@ -1,3 +1,6 @@
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 <?php
 // Initialize error message and success flag
 $errorMsg = '';
@@ -25,7 +28,7 @@ if (!$config) {
 
 // Proceed with database operations if successful
 if ($success) {
-    $sql = "SELECT product_id, pname, price FROM Product";
+    $sql = "SELECT product_id, pname, price FROM product";
     $result = $conn->query($sql);
 }
 ?>

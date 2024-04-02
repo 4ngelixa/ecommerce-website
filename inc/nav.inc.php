@@ -28,8 +28,8 @@ if (session_status() === PHP_SESSION_NONE) {
                     <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
                     <a href="/profile.php"> <i class="fa-solid fa-lock"></i> Profile</a>
                     <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i>Sign Out</a>
+                    <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
                     <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
-                    <a href="/products.php"> Products</a>
                 </div>
                 ';} 
                 else{
@@ -39,6 +39,7 @@ if (session_status() === PHP_SESSION_NONE) {
                         <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
                         <a href="/authentication.php"> <i class="fa-solid fa-lock"></i> Login</a>
                         <a href="/authentication.php"><i class="fa-solid fa-sign-hanging"> </i>Sign Up</a>
+                        <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
                         <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
                     </div>
                     ';

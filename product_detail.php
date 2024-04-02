@@ -28,7 +28,7 @@ if ($success) {
     $productID = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
     // Prepare the SQL statement to prevent SQL injection
-    if ($stmt = $conn->prepare("SELECT pname, pdescription, sku, price, stock FROM Product WHERE product_id = ?")) {
+    if ($stmt = $conn->prepare("SELECT pname, pdescription, sku, price, stock FROM product WHERE product_id = ?")) {
         $stmt->bind_param("i", $productID);
         $stmt->execute();
         $result = $stmt->get_result();
