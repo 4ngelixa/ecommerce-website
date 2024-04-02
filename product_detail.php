@@ -174,7 +174,13 @@ if ($success) {
                     <?= htmlspecialchars($product["stock"]); ?> available
                 </div>
                 <br>
-                <button onclick="location.href='payment.php?id=<?= $productID; ?>'">Add to Cart</button>
+                <form method="post" action="shopping_cart.php">
+                    <input type="hidden" name="product_id" value="<?= $productID ?>">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1">
+                    <button type="submit">Add to Cart</button>
+                </form>
+
             </div>
         </div>
     <?php else: ?>

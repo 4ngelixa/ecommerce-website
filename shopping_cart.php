@@ -9,10 +9,86 @@
 include "inc/nav.inc.php";
 ?>
 
+<?php
+// Include database connection or any necessary initialization
+// Initialize error message and success flag
+$errorMsg = '';
+$success = true;
+
+// Start the session
+session_start();
+
+// Create database connection
+$config = parse_ini_file('/var/www/private/db-config.ini');
+if (!$config) {
+    $errorMsg = "Failed to read database config file.";
+    $success = false;
+} else {
+    $conn = new mysqli(
+        $config['servername'],
+        $config['username'],
+        $config['password'],
+        $config['dbname']
+    );
+
+    // Check connection
+    if ($conn->connect_error) {
+        $errorMsg = "Connection failed: " . $conn->connect_error;
+        $success = false;
+    }
+}
+
+// Check if the user has submitted a form to add a product to the cart
+if (isset($_POST['product_id'], $_POST['quantity']) && is_numeric($_POST['product_id']) && is_numeric($_POST['quantity'])) {
+    // Set the post variables so we easily identify them, also make sure they are integer
+    $product_id = (int)$_POST['product_id'];
+    $quantity = (int)$_POST['quantity'];
+    // Prepare the SQL statement, we basically are checking if the product exists in our database
+    $stmt = $conn->prepare('SELECT * FROM product WHERE product_id = ?');
+    $stmt->bind_param('i', $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $product = $result->fetch_assoc();
+    // Check if the product exists (array is not empty)
+    if ($product && $quantity > 0) {
+        // Product exists in database, now we can create/update the session variable for the cart
+        if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+            if (array_key_exists($product_id, $_SESSION['cart'])) {
+                // Product exists in cart so just update the quantity
+                $_SESSION['cart'][$product_id] += $quantity;
+            } else {
+                // Product is not in cart so add it
+                $_SESSION['cart'][$product_id] = $quantity;
+            }
+        } else {
+            // There are no products in cart, this will add the first product to cart
+            $_SESSION['cart'] = array($product_id => $quantity);
+        }
+    }
+}
+
+// Fetch products from database if cart is not empty
+$productsInCart = [];
+if (!empty($_SESSION['cart'])) {
+    // Prepare statement to fetch products from database
+    $productIds = implode(',', array_keys($_SESSION['cart']));
+    $query = "SELECT * FROM product WHERE product_id IN ($productIds)";
+    $result = $conn->query($query);
+    // Store fetched products in an array
+    while ($row = $result->fetch_assoc()) {
+        $productsInCart[$row['product_id']] = $row;
+    }
+}
+
+// Close the database connection
+$conn->close();
+?>
+
+
 <main class="container">
     <?php
     // Check if the cart is empty
-    if (empty($products_in_cart)) {
+    if (empty($productsInCart)) {
         echo "<div class='empty-cart-container'>";
         echo "<div class='empty-cart-message'>Your Cart is Empty</div>";
         echo "<div class='empty-cart-image'><img src='images/emptycart.jpg' alt='Empty Cart Image'></div>";
@@ -20,7 +96,7 @@ include "inc/nav.inc.php";
         echo "<button class='view-products-button' onclick='location.href=\"products.php\"'>View Products</button>";
     } else {
         // Cart is not empty, display cart items
-    ?>
+        ?>
         <h1>Your Cart</h1>
         <div class="cart-items">
             <form method="post">
@@ -34,21 +110,27 @@ include "inc/nav.inc.php";
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($products as $product): ?>
-                            <tr>
-                                <td class="img">
-                                    <!-- Add image here if needed -->
-                                </td>
-                                <td>
-                                    <h2><?= htmlspecialchars($product["pname"]); ?></h2>
-                                </td>
-                                <td class="price">$<?= number_format((float)$product["price"], 2, '.', ''); ?></td>
-                                <td class="quantity">
-                                    <input type="number" name="quantity-<?= $product["id"] ?>" value="<?= $products_in_cart[$product['id']] ?>" min="1" max="10">
-                                </td>
-                                <td class="price">$<?= number_format((float)$product['price'] * (int)$products_in_cart[$product['id']], 2, '.', ''); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
+                    <?php foreach ($products as $product): ?>
+                        <tr>
+                            <td class="img">
+                                <!-- Add image here if needed -->
+                            </td>
+                            <td>
+                                <h2><?= htmlspecialchars($product["pname"]); ?></h2>
+                            </td>
+                            <td class="price">$<?= number_format((float)$product["price"], 2, '.', ''); ?></td>
+                            <td class="quantity">
+                                <input type="number" name="quantity-<?= $product["product_id"] ?>" value="<?= $productsInCart[$product['product_id']] ?>" min="1" max="10">
+                            </td>
+                            <td class="price">$<?= number_format((float)$product['price'] * (int)$productsInCart[$product['product_id']], 2, '.', ''); ?></td>
+                            <td class="actions">
+                                <form method="GET" action="shopping_cart.php">
+                                    <input type="hidden" name="remove" value="<?= $product['product_id'] ?>">
+                                    <button type="submit" class="remove-button">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
                 <div class="subtotal">
@@ -56,13 +138,15 @@ include "inc/nav.inc.php";
                     <span class="price">$<?= number_format($subtotal, 2, '.', ''); ?></span>
                 </div>
                 <div class="buttons">
-                    <input type="submit" value="Update" name="update">
-                    <input type="submit" value="Place Order" name="placeorder">
-                    <button onclick="location.href='card.php'">Proceed to Checkout</button>
+                    <input type="submit" value="Update" name="update" formaction="products.php">
+                    <input type="submit" value="Proceed to checkout" name="proceed to checkout" formaction="card.php">
                 </div>
+
             </form>
         </div>
-    <?php } ?>
+        <?php
+    }
+    ?>
 </main>
 
 <?php
