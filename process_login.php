@@ -88,6 +88,7 @@
         function authenticateUser()
         {
             global $fname, $lname, $email, $pwd_hashed, $errorMsg, $success;
+            $otp = NULL;
 
             // Create database connection.
             $config = parse_ini_file('/var/www/private/db-config.ini');
@@ -133,7 +134,7 @@
                             $_SESSION["fname"] = $fname;
                             $_SESSION["lname"] = $lname;
                             $_SESSION["email"] = $email;
-                            $_SESSION["authenticated"] = true;
+                            $_SESSION["otp"] = $otp;
                         }
                     } else {
                         $errorMsg = "Email not found or password doesn't match...";

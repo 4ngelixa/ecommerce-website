@@ -45,14 +45,14 @@
         }
 
         //Password
-        if (empty($_POST["pwd"])) {
+        if (empty($_POST["pwd1"])) {
             $errorMsg .= "Passwords are empty. They should not be empty<br>";
             $success = false;
         } else {
-            if (strlen($_POST["pwd"]) < 8) {
+            if (strlen($_POST["pwd1"]) < 8) {
                 $errorMsg .= "Password must be at least 8 characters long.<br>";
                 $success = false;
-            } elseif ($_POST["pwd"] != $_POST["pwd_confirm"]) {
+            } elseif ($_POST["pwd1"] != $_POST["pwd_confirm"]) {
                 $errorMsg .= "Passwords are not the same.<br>";
                 $success = false;
             } else {
