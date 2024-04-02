@@ -1,0 +1,39 @@
+.container {
+    text-align: center; /* Center-align the content within the container */
+}
+
+.empty-cart-message {
+    margin-top: 50px; /* Add top margin for spacing */
+    margin-bottom: 20px; /* Add bottom margin for spacing */
+    font-size: 24px; /* Font size */
+}
+
+.empty-cart-image {
+    margin-top: 20px; /* Add top margin for spacing */
+    margin-bottom: 20px; /* Add bottom margin for spacing */
+    max-width: 200px; /* Set a fixed maximum width for the image */
+    margin-left: auto; /* Align the image to the left */
+    margin-right: auto; /* Align the image to the right */
+    display: block; /* Ensure the image is displayed as a block element */
+    text-align: center; /* Center-align the content within the container */
+    background-image: url('images/emptycart.jpg'); /* Set the initial background image */
+    background-size: cover; /* Ensure the background image covers the container */
+    background-position: center; /* Center-align the background image */
+    transition: background-image 0.5s ease; /* Add a transition effect */
+}
+
+.empty-cart-image.hover {
+    background-image: url('images/addtocart.jpg');
+    transition: background-image 0.5s ease; /* Add transition effect */
+}
+
+.view-products-button {
+    margin-top: 20px; /* Add top margin for spacing */
+    margin-bottom: 20px; /* Add bottom margin for spacing */
+    background-color: #5e8f94; /* Background color */
+    color: #fff; /* Text color */
+    padding: 8px 15px; /* Padding */
+    border: none; /* Remove border */
+    cursor: pointer; /* Add cursor pointer on hover */
+    border-radius: 5px; /* Add border-radius for rounded corners */
+}
