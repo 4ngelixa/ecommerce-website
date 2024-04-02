@@ -62,6 +62,7 @@ if ($success) {
             font-family: Arial, sans-serif;
             padding: 0;
             margin: 0;
+            position: relative;
         }
 
         .product-container {
@@ -70,18 +71,18 @@ if ($success) {
             margin: 40px auto;
             padding: 20px;
             align-items: center;
-            /* Aligns items vertically */
         }
 
         .product-image {
             flex: 1;
             text-align: center;
+            padding: 30px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
         }
 
         .product-image img {
             max-width: 100%;
             max-height: 300px;
-            /* Adjusts the size of the product image */
         }
 
         .product-details {
@@ -98,11 +99,13 @@ if ($success) {
 
         .product-description {
             margin-bottom: 10px;
+            font-size: 20px;
         }
 
         .product-sku,
         .product-stock {
             margin-bottom: 5px;
+            color: darkgrey;
         }
 
         button {
@@ -118,14 +121,36 @@ if ($success) {
         button:hover {
             background-color: #0056b3;
         }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: black;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        
     </style>
 </head>
 
 <body>
-<?php include "inc/head.inc.php"; ?>
-<?php include "inc/nav.inc.php"; ?>
-
+    <?php include "inc/head.inc.php"; ?>
+    <?php include "inc/nav.inc.php"; ?>
     <?php if ($success && $product): ?>
+        <button class="back-button" onclick="location.href='product_catalogue.php'">Back to Products</button>
         <div class="product-container">
             <div class="product-image">
                 <img src="images/<?= strtolower($product["pname"]); ?>.png"
@@ -138,6 +163,7 @@ if ($success) {
                 <div class="product-price">$
                     <?= number_format((float) $product["price"], 2, '.', ''); ?>
                 </div>
+                <br>
                 <div class="product-description">
                     <?= nl2br(htmlspecialchars($product["pdescription"])); ?>
                 </div>
@@ -147,6 +173,7 @@ if ($success) {
                 <div class="product-stock">Stock:
                     <?= htmlspecialchars($product["stock"]); ?> available
                 </div>
+                <br>
                 <button onclick="location.href='payment.php?id=<?= $productID; ?>'">Add to Cart</button>
             </div>
         </div>

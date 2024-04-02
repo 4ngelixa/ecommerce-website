@@ -63,15 +63,15 @@ if ($success) {
         }
 
         a.product {
+            flex-basis: 20%;
+            width: 20%;
+            margin: 2%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 1em;
             text-align: center;
             padding: 1em;
             background: #fff;
             text-decoration: none;
             color: inherit;
-            flex: 1 1 200px;
-            /* Flex item can grow and shrink from 200px */
         }
 
         a.product:hover {
@@ -86,25 +86,23 @@ if ($success) {
 
         .product h2 {
             font-size: 1.5em;
-            /* Slightly reduced font size */
             margin: 0.5em 0;
         }
 
         .product p {
             color: #333;
             font-size: 1.3em;
-            /* Increased font size for price */
             margin: 0.5em 0;
             font-weight: bold;
-            /* Bold price */
         }
 
         @media (max-width: 600px) {
-            .product {
-                flex-basis: 100%;
-                /* Full width on small screens */
+            a.product {
+                flex-basis: 45%;
+                width: 45%;
             }
         }
+
     </style>
 </head>
 
@@ -113,7 +111,7 @@ if ($success) {
     <?php include "inc/nav.inc.php"; ?>
 
     <div class="container">
-        <h1 class="product-catalog-title">Bling Bling Badminton Products</h1>
+        <h1 class="product-catalog-title">✧ Bling Bling Badminton Products ✧</h1>
         <div class="products">
             <?php if ($success && $result && $result->num_rows > 0): ?>
                 <?php while ($row = $result->fetch_assoc()): ?>
