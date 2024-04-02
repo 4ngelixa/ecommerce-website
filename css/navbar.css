@@ -1,0 +1,72 @@
+/*##  NAVBAR ##*/
+#Navbar{
+    background-color: #0f0c68; /* Black color */
+    
+}
+
+
+.rounded-logo {
+    width: 100px; /* Set the desired width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Define hover effect for the icons */
+.navbar-nav .nav-link .fa-solid:hover {
+    color: #C8F023;
+}
+
+/* Define hover effect for the icons */
+nav a.active {
+    color: #C8F023; /* Change the color to your desired highlight color */
+}
+
+
+/*##  SIDENAV ##*/
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    text-align: center;
+}
+
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+
+}
+
+.sidenav a:hover {
+    color: #C8F023;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#menu-icon {
+    font-size: 30px;
+    color: white
+}
+
+
+#menu-icon:hover {
+    color: #C8F023; /* Change color to green on hover */
+    animation: glow 1s infinite alternate; /* Add a glowing effect */
+}
+

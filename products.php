@@ -6,18 +6,31 @@
 
 <?php
 // Database connection variables
-$servername = "35.212.131.157";
-$username = "inf1005-dev";
-$password = "ADWXqezc1234";
-$dbname = "inf1005_bling_bling";
+// $servername = "35.212.131.157";
+// $username = "inf1005-dev";
+// $password = "ADWXqezc1234";
+// $dbname = "inf1005_bling_bling";
 
-try {
-    $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    // Set the PDO error mode to exception
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
+// try {
+//     $pdo = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+//     // Set the PDO error mode to exception
+//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// } catch (PDOException $e) {
+//     die("Connection failed: " . $e->getMessage());
+// }
+
+// Create database connection.
+$config = parse_ini_file('/var/www/private/db-config.ini');
+if (!$config) {
+    throw new Exception("Failed to read database config file.");
 }
+
+$pdo = new mysqli(
+    $config['servername'],
+    $config['username'],
+    $config['password'],
+    $config['dbname']
+);
 
 // Get the product ID from the URL
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;

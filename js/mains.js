@@ -1,8 +1,23 @@
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log("DOM fully loaded and parsed");
-    registerEventListeners();
+    activateMenu();
 });
+
+//Testing the function
+
+function activateMenu() {
+    const navLinks = document.querySelectorAll('nav a');
+    navLinks.forEach(link => {
+        if (link.href === location.href) {
+            link.classList.add('active');
+            const icon = link.querySelector('.fa-solid');
+            if (icon) {
+                icon.style.color = '#C8F023'; // Your desired highlight color
+            }
+        }
+    });
+}
 
 function popupImage(src)
 {

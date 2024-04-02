@@ -127,6 +127,14 @@
                             $errorMsg = "Email not found or password doesn't match...";
                             $success = false;
                         }
+                        else if(password_verify($_POST["pwd"], $pwd_hashed)) {
+                            session_start();
+                            session_regenerate_id(true);
+                            $_SESSION["fname"] = $fname;
+                            $_SESSION["lname"] = $lname;
+                            $_SESSION["email"] = $email;
+                            $_SESSION["authenticated"] = true;
+                        }
                     } else {
                         $errorMsg = "Email not found or password doesn't match...";
                         $success = false;

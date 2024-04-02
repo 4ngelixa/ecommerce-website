@@ -4,8 +4,8 @@
     ?>
 </head>
 <body>
-    <?php
-    include "inc/nav.inc.php";
+    <?php 
+        include "inc/nav.inc.php";
     ?>
     <main class="container d-flex justify-content-center">
     <div class="login-wrap">
