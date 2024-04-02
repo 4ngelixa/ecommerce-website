@@ -55,35 +55,104 @@ if ($success) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $success ? htmlspecialchars($product["pname"]) : "Product Not Found"; ?>
+        <?= $success && $product ? htmlspecialchars($product["pname"]) : "Product Not Found"; ?>
     </title>
-    <link rel="stylesheet" href="style.css">
+    <style scoped>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        .product-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            align-items: center;
+            /* Aligns items vertically */
+        }
+
+        .product-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 300px;
+            /* Adjusts the size of the product image */
+        }
+
+        .product-details {
+            flex: 2;
+            margin-left: 20px;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e44d26;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            margin-bottom: 10px;
+        }
+
+        .product-sku,
+        .product-stock {
+            margin-bottom: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
-    <?php if ($success): ?>
-        <div class="product-detail">
-            <img src="images/<?= strtolower($product["pname"]); ?>.png" alt="<?= htmlspecialchars($product["pname"]); ?>" />
-            <h1>
-                <?= htmlspecialchars($product["pname"]); ?>
-            </h1>
-            <p>Description:
-                <?= nl2br(htmlspecialchars($product["pdescription"])); ?>
-            </p>
-            <p>SKU:
-                <?= htmlspecialchars($product["sku"]); ?>
-            </p>
-            <p>Price: $
-                <?= number_format((float) $product["price"], 2, '.', ''); ?>
-            </p>
-            <p>Stock:
-                <?= htmlspecialchars($product["stock"]); ?> available
-            </p>
-            <button onclick="location.href='payment.php?id=<?= $productID; ?>'">Add to Cart</button>
+<?php include "inc/head.inc.php"; ?>
+<?php include "inc/nav.inc.php"; ?>
+
+    <?php if ($success && $product): ?>
+        <div class="product-container">
+            <div class="product-image">
+                <img src="images/<?= strtolower($product["pname"]); ?>.png"
+                    alt="<?= htmlspecialchars($product["pname"]); ?>" />
+            </div>
+            <div class="product-details">
+                <h1>
+                    <?= htmlspecialchars($product["pname"]); ?>
+                </h1>
+                <div class="product-price">$
+                    <?= number_format((float) $product["price"], 2, '.', ''); ?>
+                </div>
+                <div class="product-description">
+                    <?= nl2br(htmlspecialchars($product["pdescription"])); ?>
+                </div>
+                <div class="product-sku">SKU:
+                    <?= htmlspecialchars($product["sku"]); ?>
+                </div>
+                <div class="product-stock">Stock:
+                    <?= htmlspecialchars($product["stock"]); ?> available
+                </div>
+                <button onclick="location.href='payment.php?id=<?= $productID; ?>'">Add to Cart</button>
+            </div>
         </div>
     <?php else: ?>
         <p>
-            <?= $errorMsg; ?>
+            <?= $errorMsg ?: "Product not found." ?>
         </p>
     <?php endif; ?>
 </body>

@@ -1,6 +1,3 @@
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 <?php
 // Initialize error message and success flag
 $errorMsg = '';
@@ -40,38 +37,109 @@ if ($success) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Catalog</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .product-catalog-title {
+            text-align: center;
+            margin: 2em 0;
+            font-weight: bold;
+        }
+
+        .products {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        a.product {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 1em;
+            text-align: center;
+            padding: 1em;
+            background: #fff;
+            text-decoration: none;
+            color: inherit;
+            flex: 1 1 200px;
+            /* Flex item can grow and shrink from 200px */
+        }
+
+        a.product:hover {
+            background-color: #f8f8f8;
+            cursor: pointer;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product h2 {
+            font-size: 1.5em;
+            /* Slightly reduced font size */
+            margin: 0.5em 0;
+        }
+
+        .product p {
+            color: #333;
+            font-size: 1.3em;
+            /* Increased font size for price */
+            margin: 0.5em 0;
+            font-weight: bold;
+            /* Bold price */
+        }
+
+        @media (max-width: 600px) {
+            .product {
+                flex-basis: 100%;
+                /* Full width on small screens */
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <?php include "inc/head.inc.php"; ?>
+    <?php include "inc/nav.inc.php"; ?>
+
     <div class="container">
-        <h1>Product Catalog</h1>
+        <h1 class="product-catalog-title">Bling Bling Badminton Products</h1>
         <div class="products">
             <?php if ($success && $result && $result->num_rows > 0): ?>
                 <?php while ($row = $result->fetch_assoc()): ?>
-                    <div class="product">
+                    <a href="product_detail.php?id=<?= $row["product_id"]; ?>" class="product">
                         <img src="images/<?= strtolower($row["pname"]); ?>.png" alt="<?= htmlspecialchars($row["pname"]); ?>" />
-                        <h2><a href="product_detail.php?id=<?= $row["product_id"]; ?>">
-                                <?= htmlspecialchars($row["pname"]); ?>
-                            </a></h2>
+                        <h2>
+                            <?= htmlspecialchars($row["pname"]); ?>
+                        </h2>
                         <p>$
                             <?= number_format((float) $row["price"], 2, '.', ''); ?>
                         </p>
-                    </div>
+                    </a>
                 <?php endwhile; ?>
             <?php else: ?>
                 <p>
                     <?= $errorMsg ?: "No products found." ?>
                 </p>
             <?php endif; ?>
-            <?php
-            // Close the database connection if it was successful
-            if ($success) {
-                $conn->close();
-            }
-            ?>
         </div>
     </div>
+    <?php
+    // Close the database connection if it was successful
+    if ($success) {
+        $conn->close();
+    }
+    ?>
 </body>
 
 </html>
