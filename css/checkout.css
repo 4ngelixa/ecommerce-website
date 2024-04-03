@@ -1,0 +1,88 @@
+/* CSS for centering the title */
+.checkout-container {
+    text-align: center;
+}
+
+/* CSS for styling the pickup venue section and other boxed elements */
+.pickup-venue,
+.ordered-products,
+.email-form,
+.buttons {
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: 600px; /* Adjust as needed */
+    background-color: #f9f9f9;
+}
+
+.pickup-venue select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* CSS for styling table */
+.ordered-products table {
+    width: 100%;
+}
+
+.ordered-products th,
+.ordered-products td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.ordered-products th {
+    text-align: left;
+}
+
+.total-price {
+    margin-top: 20px;
+    text-align: right;
+}
+
+/* CSS for email form */
+.email-form form {
+    text-align: center;
+}
+
+.email-form input[type="email"],
+.email-form button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* CSS for next button */
+.email-form button[type="submit"] {
+    background-color: cornflowerblue; /* Changed background color */
+    color: #fff; /* Text color */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.email-form button[type="submit"]:hover {
+    background-color: #4682b4; /* Darker shade of cornflowerblue on hover */
+}
+
+
+/* CSS for back button */
+.buttons .back-button {
+    background-color: cornflowerblue; /* Changed background color */
+    color: #fff; /* Text color */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buttons .back-button:hover {
+    background-color: #4682b4; /* Darker shade of cornflowerblue on hover */
+}
+

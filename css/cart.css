@@ -1,90 +1,147 @@
 .container {
-    text-align: center; /* Center-align the content within the container */
-}
-
-.empty-cart-message {
-    margin-top: 50px; /* Add top margin for spacing */
-    margin-bottom: 20px; /* Add bottom margin for spacing */
-    font-size: 24px; /* Font size */
-}
-
-.empty-cart-image {
-    margin-top: 20px; /* Add top margin for spacing */
-    margin-bottom: 20px; /* Add bottom margin for spacing */
-    max-width: 200px; /* Set a fixed maximum width for the image */
-    margin-left: auto; /* Align the image to the left */
-    margin-right: auto; /* Align the image to the right */
-    display: block; /* Ensure the image is displayed as a block element */
-    text-align: center; /* Center-align the content within the container */
-    background-image: url('images/emptycart.jpg'); /* Set the initial background image */
-    background-size: cover; /* Ensure the background image covers the container */
-    background-position: center; /* Center-align the background image */
-    transition: background-image 0.5s ease; /* Add a transition effect */
-}
-
-.empty-cart-image.hover {
-    background-image: url('images/addtocart.jpg');
-    transition: background-image 0.5s ease; /* Add transition effect */
-}
-
-.view-products-button {
-    margin-top: 20px; /* Add top margin for spacing */
-    margin-bottom: 20px; /* Add bottom margin for spacing */
-    background-color: #5e8f94; /* Background color */
-    color: #fff; /* Text color */
-    padding: 8px 15px; /* Padding */
-    border: none; /* Remove border */
-    cursor: pointer; /* Add cursor pointer on hover */
-    border-radius: 5px; /* Add border-radius for rounded corners */
-}
-
-main .cart table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-main .cart table thead th,
-main .cart table tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #EEEEEE;
-}
-
-main .cart table td {
     text-align: center;
 }
 
-main .cart table input[type="number"] {
-    width: 50px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    color: #555555;
+.empty-cart-message {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.empty-cart-image {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    text-align: center;
+    background-image: url('images/emptycart.jpg');
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s ease; /* Add a transition effect on transform */
+}
+
+.empty-cart-image:hover {
+    transform: scale(1.1); /* Apply scale transformation on hover */
+    background-image: url('images/addtocart.jpg'); /* Change background image */
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0; /* Start with opacity 0 */
+        background-image: url('images/emptycart.jpg'); /* Initial background image */
+    }
+    100% {
+        opacity: 1; /* End with opacity 1 */
+        background-image: url('images/addtocart.jpg'); /* Change background image */
+    }
+}
+
+
+.view-products-button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #5e8f94;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
     border-radius: 5px;
 }
 
-main .cart .subtotal {
-    text-align: right;
-    padding: 20px 0;
+.cart table td {
+    text-align: center;
+    vertical-align: middle; /* Add this line */
 }
 
-main .cart .subtotal .text {
-    padding-right: 20px;
+.cart table th {
+    text-align: center;
+    vertical-align: middle; /* Add this line */
+}
+
+/* Cart heading */
+.cart-container h1 {
+    display: block;
+    font-weight: normal;
+    margin: 0;
+    padding: 40px 0;
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+}
+
+/* Cart items table */
+.cart-container .cart-items table {
+    width: 100%;
+}
+
+.cart-container .cart-items table thead th {
+    padding: 30px 0;
+    border-bottom: 1px solid #EEEEEE;
+    text-align: left;
+}
+
+.cart-container .cart-items table thead th:nth-child(1),
+.cart-container .cart-items table thead th:nth-child(2) {
+    width: 25%;
+}
+
+.cart-container .cart-items table thead th:nth-child(3),
+.cart-container .cart-items table thead th:nth-child(4),
+.cart-container .cart-items table thead th:nth-child(5) {
+    width: 15%;
+}
+
+.cart-container .cart-items table tbody td {
+    padding: 20px 0;
+    border-bottom: 1px solid #EEEEEE;
+    text-align: left; /* Center content horizontally */
+    vertical-align: middle; /* Center content vertically */
+}
+
+/* Cart items table */
+.cart-container .cart-items table tbody td h2 {
+    font-size: 16px; /* Adjust the font size as needed */
+}
+
+.cart-container .cart-items table tbody td:nth-child(1),
+.cart-container .cart-items table tbody td:nth-child(2) {
+    width: 25%;
+}
+
+.cart-container .cart-items table tbody td:nth-child(3),
+.cart-container .cart-items table tbody td:nth-child(4),
+.cart-container .cart-items table tbody td:nth-child(5) {
+    width: 15%;
+}
+
+/* Cart subtotal */
+.cart-container .subtotal {
+    text-align: right;
+    padding: 40px 0;
+}
+
+.cart-container .subtotal .text {
+    padding-right: 40px;
     font-size: 18px;
 }
 
-main .cart .subtotal .price {
+.cart-container .subtotal .price {
     font-size: 18px;
     color: #999999;
 }
 
-main .cart .buttons {
-    text-align: center;
-    padding-top: 20px;
+/* Cart buttons */
+.cart-container .buttons {
+    text-align: right;
+    padding-bottom: 40px;
 }
 
-main .cart .buttons input[type="submit"],
-main .cart .buttons button {
-    margin: 0 5px;
-    padding: 10px 20px;
+.cart-container .buttons input[type="submit"],
+.cart-container .buttons button {
+    margin-left: 5px;
+    padding: 12px 20px;
     border: 0;
     background: cornflowerblue;
     color: #FFFFFF;
@@ -94,7 +151,7 @@ main .cart .buttons button {
     border-radius: 5px;
 }
 
-main .cart .buttons input[type="submit"]:hover,
-main .cart .buttons button:hover {
-    background: orchid;
+.cart-container .buttons input[type="submit"]:hover,
+.cart-container .buttons button:hover {
+    background: #223656;
 }

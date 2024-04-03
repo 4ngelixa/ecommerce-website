@@ -54,8 +54,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="pwd" class="form-label">Password:</label>
-                    <input required type="password" id="pwd1" name="pwd" class="form-control" placeholder="Enter password">
+                    <label for="pwd1" class="form-label">Password:</label>
+                    <input required type="password" id="pwd1" name="pwd1" class="form-control" placeholder="Enter password">
                 </div>
 
                 <div class="mb-3">

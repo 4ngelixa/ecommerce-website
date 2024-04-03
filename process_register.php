@@ -37,6 +37,12 @@
             }
         }
 
+        if (empty($_POST["fname"])) {
+            $errorMsg .= "First Name is required.<br>";
+        } else {
+            $fname = sanitize_input($_POST["fname"]);
+        }
+
         //Last Name
         if (empty($_POST["lname"])) {
             $errorMsg .= "Last Name is required.<br>";
@@ -56,8 +62,8 @@
                 $errorMsg .= "Passwords are not the same.<br>";
                 $success = false;
             } else {
-                // $pwd = password_hash($_POST["pwd"], PASSWORD_DEFAULT);
-                $pwd = password_hash($_POST["pwd"], PASSWORD_DEFAULT);
+                $pwd = sanitize_input($_POST["pwd"]);
+                $pwd = password_hash($pwd, PASSWORD_DEFAULT);
             }
         }
         

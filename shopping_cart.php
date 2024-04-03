@@ -1,7 +1,9 @@
 <head>
     <title>Your Cart</title>
     <link rel="stylesheet" href="css/cart.css">
-    <?php include "inc/head.inc.php"; ?>
+    <?php 
+        include "inc/head.inc.php"; 
+    ?>
 </head>
 
 <?php
@@ -80,11 +82,39 @@ if (!empty($_SESSION['cart'])) {
     }
 }
 
+// Handle Remove Action
+if(isset($_POST['remove'])) {
+    $removeProductId = $_POST['remove'];
+    if(isset($_SESSION['cart'][$removeProductId])) {
+        unset($_SESSION['cart'][$removeProductId]);
+    }
+    // Optionally, redirect back to the same page to avoid resubmission on refresh
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit;
+}
+
+// Handle Update Action
+if(isset($_POST['update']) && isset($_SESSION['cart'])) {
+    foreach ($_POST as $key => $value) {
+        if (strpos($key, 'quantity-') !== false && is_numeric($value)) {
+            $productId = str_replace('quantity-', '', $key);
+            $quantity = (int)$value;
+
+            if (isset($_SESSION['cart'][$productId]) && $quantity > 0) {
+                $_SESSION['cart'][$productId] = $quantity;
+            }
+        }
+    }
+    // Optionally, redirect back to the same page to avoid resubmission on refresh
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit;
+}
+
 // Close the database connection
 $conn->close();
 ?>
 
-
+<body>
 <main class="container">
     <?php
     // Check if the cart is empty
@@ -92,59 +122,64 @@ $conn->close();
         echo "<div class='empty-cart-container'>";
         echo "<div class='empty-cart-message'>Your Cart is Empty</div>";
         echo "<div class='empty-cart-image'><img src='images/emptycart.jpg' alt='Empty Cart Image'></div>";
+        echo '<form action="products.php" method="get"><button type="submit" class="view-products-button">View Products</button></form>';
         echo "</div>";
-        echo "<button class='view-products-button' onclick='location.href=\"products.php\"'>View Products</button>";
     } else {
         // Cart is not empty, display cart items
-        ?>
+    ?>
+    <div class="cart-container">
         <h1>Your Cart</h1>
         <div class="cart-items">
-            <form method="post">
+            <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <table>
                     <thead>
                         <tr>
-                            <th colspan="2">Product</th>
+                            <th>Product</th>
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Total</th>
+                            <th></th> <!-- Added a column for action -->
                         </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($products as $product): ?>
-                        <tr>
-                            <td class="img">
-                                <!-- Add image here if needed -->
-                            </td>
-                            <td>
-                                <h2><?= htmlspecialchars($product["pname"]); ?></h2>
-                            </td>
-                            <td class="price">$<?= number_format((float)$product["price"], 2, '.', ''); ?></td>
-                            <td class="quantity">
-                                <input type="number" name="quantity-<?= $product["product_id"] ?>" value="<?= $productsInCart[$product['product_id']] ?>" min="1" max="10">
-                            </td>
-                            <td class="price">$<?= number_format((float)$product['price'] * (int)$productsInCart[$product['product_id']], 2, '.', ''); ?></td>
-                            <td class="actions">
-                                <form method="GET" action="shopping_cart.php">
-                                    <input type="hidden" name="remove" value="<?= $product['product_id'] ?>">
-                                    <button type="submit" class="remove-button">Remove</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
+                        <?php foreach ($productsInCart as $product): ?> <!-- Changed $products to $productsInCart -->
+                            <tr>
+                                <td>
+                                    <h2><?= htmlspecialchars($product["pname"]); ?></h2>
+                                </td>
+                                <td class="price">$<?= number_format((float)$product["price"], 2, '.', ''); ?></td>
+                                <td class="quantity">
+                                    <input type="number" name="quantity-<?= $product["product_id"] ?>" value="<?= $_SESSION['cart'][$product['product_id']] ?>" min="0" max="100">
+                                </td>
+                                <td class="price">$<?= number_format((float)$product['price'] * (int)$_SESSION['cart'][$product['product_id']], 2, '.', ''); ?></td>
+                                <td class="actions">
+                                    <button type="submit" class="remove-button" name="remove" value="<?= $product['product_id'] ?>">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
                 <div class="subtotal">
                     <span class="text">Subtotal</span>
+                    <?php
+                        // Calculate subtotal
+                        $subtotal = 0;
+                        foreach ($productsInCart as $product) {
+                            $subtotal += $product['price'] * $_SESSION['cart'][$product['product_id']];
+                        }
+                    ?>
                     <span class="price">$<?= number_format($subtotal, 2, '.', ''); ?></span>
                 </div>
                 <div class="buttons">
-                    <input type="submit" value="Update" name="update" formaction="products.php">
-                    <input type="submit" value="Proceed to checkout" name="proceed to checkout" formaction="card.php">
+                    <input type="submit" value="Continue Browsing" name="continue_browsing" formaction="products.php">
+                    <input type="submit" value="Update" name="update">
+                    <input type="submit" value="Proceed to checkout" name="proceed_to_checkout" formaction="checkout.php">
                 </div>
-
             </form>
         </div>
-        <?php
+    <?php
     }
     ?>
 </main>
