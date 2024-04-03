@@ -58,6 +58,24 @@ if ($success) {
         <?= $success && $product ? htmlspecialchars($product["pname"]) : "Product Not Found"; ?>
     </title>
     <style scoped>
+        /* Define keyframes for animation */
+        @keyframes scaleUp {
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.1);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+
+        /* Apply animation to the button */
+        button[type="submit"] {
+          /* Your existing styles */
+          animation: scaleUp 0.3s ease-in-out; /* Apply animation */
+        }
         body {
             font-family: Arial, sans-serif;
             padding: 0;
@@ -177,7 +195,7 @@ if ($success) {
                 <form method="post" action="shopping_cart.php" id="add-to-cart-form">
                     <input type="hidden" name="product_id" value="<?= $productID ?>">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" value="1" min="1">
+                    <input type="number" id="quantity" name="quantity" value="1" min="0" max="100">
                     <button type="submit">Add to Cart</button>
                 </form>
 
@@ -193,9 +211,11 @@ if ($success) {
     // Function to calculate total quantity in the cart
     function updateCartIcon() {
         var totalQuantity = 0;
-        <?php foreach ($_SESSION['cart'] as $productId => $quantity): ?>
-            totalQuantity += <?= $quantity ?>;
-        <?php endforeach; ?>
+        <?php if(isset($_SESSION['cart'])): ?>
+            <?php foreach ($_SESSION['cart'] as $productId => $quantity): ?>
+                totalQuantity += <?= $quantity ?>;
+            <?php endforeach; ?>
+        <?php endif; ?>
 
         // Update the cart icon in the navbar
         var cartIcon = document.getElementById('cart-icon');
@@ -204,6 +224,7 @@ if ($success) {
         }
     }
 
+    // Function to handle form submission using AJAX
     document.getElementById('add-to-cart-form').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent form submission
         var quantity = parseInt(document.getElementById('quantity').value);
@@ -221,7 +242,8 @@ if ($success) {
 
     // Call the function initially to update the cart icon when the page loads
     updateCartIcon();
-    </script>
+</script>
+
     <?php include "inc/footer.inc.php"; ?>
 </body>
 </html>

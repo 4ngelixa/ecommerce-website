@@ -3,8 +3,13 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Get the number of items in the shopping cart, which will be displayed in the header.
-$num_items_in_cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
+// Calculate total quantity of items in the cart
+$num_items_in_cart = 0;
+if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+    foreach($_SESSION['cart'] as $quantity) {
+        $num_items_in_cart += $quantity;
+    }
+}
 ?>
 
 <nav id="Navbar" class="navbar navbar-expand-sm navbar-dark sticky-top">

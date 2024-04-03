@@ -1,38 +1,39 @@
-// Wait for the DOM content to be loaded
 document.addEventListener("DOMContentLoaded", function() {
-    // Get the element with the empty-cart-image class
+    console.log("DOM content loaded"); // Check if this line appears in the console
+
+    // Add event listeners for mouseover and mouseout events
     const emptyCartImage = document.querySelector('.empty-cart-image');
-
-    // Add event listener for mouseover event
     emptyCartImage.addEventListener('mouseover', function() {
-        // Add the hover class on mouseover
-        emptyCartImage.classList.add('hover');
+        emptyCartImage.style.backgroundImage = "url('images/addtocart.jpg')";
     });
-
-    // Add event listener for mouseout event
     emptyCartImage.addEventListener('mouseout', function() {
-        // Remove the hover class on mouseout
-        emptyCartImage.classList.remove('hover');
+        emptyCartImage.style.backgroundImage = "url('images/emptycart.jpg')";
     });
 
-    // Add event listener to remove buttons
-    var removeButtons = document.querySelectorAll('.remove-button');
+    // Get all remove buttons
+    var removeButtons = document.querySelectorAll(".remove-button");
+
+    // Add click event listener to each remove button
     removeButtons.forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            var confirmRemove = confirm("Are you sure you want to remove the item?");
-            if (confirmRemove) {
-                // Proceed with removing the item from the cart
-                var productId = this.getAttribute('data-product-id');
-                var form = document.createElement('form');
-                form.method = 'post';
-                form.action = '';
-                var inputProductId = document.createElement('input');
-                inputProductId.type = 'hidden';
-                inputProductId.name = 'remove';
-                inputProductId.value = productId;
-                form.appendChild(inputProductId);
-                document.body.appendChild(form);
-                form.submit();
+        button.addEventListener("click", function(event) {
+            console.log("Remove button clicked"); // Check if this line appears in the console
+            
+            // Prevent the default action of the button
+            event.preventDefault();
+
+            // Get the product ID from the button's data attribute
+            var productId = button.getAttribute("data-product-id");
+
+            // Show a confirmation prompt
+            var confirmation = confirm("Are you sure you want to remove this item from the cart?");
+
+            // If the user confirms, proceed with removing the item
+            if (confirmation) {
+                // Set the product ID in a hidden input field
+                document.querySelector('input[name="remove"]').value = productId;
+
+                // Submit the form to remove the item from the cart
+                button.closest('form').submit();
             }
         });
     });
