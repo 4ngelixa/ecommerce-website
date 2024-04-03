@@ -119,6 +119,8 @@
                         $row = $result->fetch_assoc();
                         $fname = $row["fname"];
                         $lname = $row["lname"];
+                        $phone = $row["phone"];
+                        $country = $row["country"];
                         $pwd_hashed = $row["password"];
 
                         // Check if the password matches:
@@ -134,6 +136,8 @@
                             $_SESSION["fname"] = $fname;
                             $_SESSION["lname"] = $lname;
                             $_SESSION["email"] = $email;
+                            $_SESSION["phone"] = $phone;
+                            $_SESSION["country"] = $country;
                             $_SESSION["otp"] = $otp;
                         }
                     } else {
