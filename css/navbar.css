@@ -12,12 +12,12 @@
 
 /* Define hover effect for the icons */
 .navbar-nav .nav-link .fa-solid:hover {
-    color: #C8F023;
+    color: #9ABF00;
 }
 
 /* Define hover effect for the icons */
 nav a.active {
-    color: #C8F023; /* Change the color to your desired highlight color */
+    color: #9ABF00; /* Change the color to your desired highlight color */
 }
 
 
@@ -48,7 +48,7 @@ nav a.active {
 }
 
 .sidenav a:hover {
-    color: #C8F023;
+    color: #9ABF00;
 }
 
 .sidenav .closebtn {
@@ -67,7 +67,7 @@ nav a.active {
 
 
 #menu-icon:hover {
-    color: #C8F023; /* Change color to green on hover */
+    color: #9ABF00; /* Change color to green on hover */
     animation: glow 1s infinite alternate; /* Add a glowing effect */
 }
 
