@@ -122,15 +122,16 @@
                         $phone = $row["phone"];
                         $country = $row["country"];
                         $pwd_hashed = $row["password"];
+                        $admin = $row["admin"];
 
                         // Check if the password matches:
-                        if (!password_verify($_POST["pwd"], $pwd_hashed)) {
+                        if (!password_verify($pwd, $pwd_hashed)) {
                             // Don't be too specific with the error message - hackers don't
                             // need to know which one they got right or wrong. :)
                             $errorMsg = "Email not found or password doesn't match...";
                             $success = false;
                         }
-                        else if(password_verify($_POST["pwd"], $pwd_hashed)) {
+                        else if(password_verify($pwd, $pwd_hashed)) {
                             session_start();
                             session_regenerate_id(true);
                             $_SESSION["fname"] = $fname;
@@ -139,6 +140,7 @@
                             $_SESSION["phone"] = $phone;
                             $_SESSION["country"] = $country;
                             $_SESSION["otp"] = $otp;
+                            $_SESSION["admin"] = $admin;
                         }
                     } else {
                         $errorMsg = "Email not found or password doesn't match...";

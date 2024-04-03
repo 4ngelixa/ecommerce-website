@@ -35,7 +35,7 @@
                                     placeholder="surname"></div>
                             <div class="col-md-6"><label class="labels">lname</label><input type="text"
                                     class="form-control" id="lname" name="lname" value=<?php echo $_SESSION['lname']; ?>
-                                    placeholder="surname"></div>
+                                    ></div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text"

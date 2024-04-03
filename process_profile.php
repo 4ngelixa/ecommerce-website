@@ -1,15 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <?php
+    include "inc/head.inc.php";
+    ?>
+</head>
 <?php
         session_start();
+        include "inc/nav.inc.php";
         ini_set('display_errors',  1); 
         ini_set('display_startup_errors',  1);
         error_reporting(E_ALL);
 
-        if (empty($_POST["lname"])) {
+        if (empty($_POST["fname"])) {
             $errorMsg = "Last Name is required.<br>";
         } else {
-            $lname = sanitize_input($_POST["lname"]);
+            $fname = sanitize_input($_POST["fname"]);
         }
-        $fname = sanitize_input($_POST["fname"]);
+        $lname = sanitize_input($_POST["lname"]);
         $phone = sanitize_input($_POST["phone"]);
         $country = sanitize_input($_POST["country"]);
         $email = sanitize_input($_SESSION["email"]);
@@ -58,3 +67,7 @@
         }
 
         ?>
+<?php
+include "inc/footer.inc.php";
+?>
+</html>

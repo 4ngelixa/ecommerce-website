@@ -24,7 +24,7 @@ $num_items_in_cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
     </span>
 
     <?php 
-    if (isset($_SESSION['lname'])) {
+    if ($_SESSION['admin'] == "admin") {
         echo '
         <!-- Side Nav Menu -->
         <div id="mySidenav" class="sidenav">
@@ -33,8 +33,21 @@ $num_items_in_cart = isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0;
             <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i> Sign Out</a>
             <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
             <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+            <a href="/admin_panel.php"><i class="fa-solid fa-cog"></i> Admin Panel</a>
             <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
 
+        </div>
+        ';
+    } else if(isset($_SESSION['fname'])) {
+        echo '
+        <!-- Side Nav Menu -->
+        <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
+        <a href="/profile.php"> <i class="fa-solid fa-lock"></i> Profile</a>
+        <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i> Sign Out</a>
+        <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
+        <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+        <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
         </div>
         ';
     } else {
