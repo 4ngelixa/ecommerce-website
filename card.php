@@ -59,7 +59,7 @@
             </div>
             <div class="button-container">
                 <button type="button" class="nextButton" onclick="window.location.href='payment.php'">Next</button>
-                <button type="button" class="backButton" onclick="window.location.href='shopping_cart.php'">Back</button>
+                <button type="button" class="backButton" onclick="window.location.href='checkout.php'">Back</button>
             </div>
             </form>
     </div>

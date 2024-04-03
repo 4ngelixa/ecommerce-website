@@ -89,24 +89,24 @@
             
                 <div class="inputBox">
                     <label for="address">Address:</label>
-                    <input type="text" id="address" placeholder="Enter address" required>
+                    <input type="text" id="address" placeholder="Enter address">
                 </div>
             
                 <div class="inputBox">
                     <label for="city">City:</label>
-                    <input type="text" id="city" placeholder="Enter city" required>
+                    <input type="text" id="city" placeholder="Enter city">
                 </div>
             
                 <div class="flex">
             
                     <div class="inputBox">
                         <label for="state">State:</label>
-                        <input type="text" id="state" placeholder="Enter state" required>
+                        <input type="text" id="state" placeholder="Enter state">
                     </div>
             
                     <div class="inputBox">
                         <label for="zip">Zip Code:</label>
-                        <input type="number" id="zip" placeholder="123 456" required>
+                        <input type="number" id="zip" placeholder="123 456">
                     </div>
                 </div>
             </div>
