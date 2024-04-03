@@ -174,7 +174,7 @@ if ($success) {
                     <?= htmlspecialchars($product["stock"]); ?> available
                 </div>
                 <br>
-                <form method="post" action="shopping_cart.php">
+                <form method="post" action="shopping_cart.php" id="add-to-cart-form">
                     <input type="hidden" name="product_id" value="<?= $productID ?>">
                     <label for="quantity">Quantity:</label>
                     <input type="number" id="quantity" name="quantity" value="1" min="1">
@@ -188,6 +188,40 @@ if ($success) {
             <?= $errorMsg ?: "Product not found." ?>
         </p>
     <?php endif; ?>
-</body>
 
+    <script>
+    // Function to calculate total quantity in the cart
+    function updateCartIcon() {
+        var totalQuantity = 0;
+        <?php foreach ($_SESSION['cart'] as $productId => $quantity): ?>
+            totalQuantity += <?= $quantity ?>;
+        <?php endforeach; ?>
+
+        // Update the cart icon in the navbar
+        var cartIcon = document.getElementById('cart-icon');
+        if (cartIcon) {
+            cartIcon.innerText = totalQuantity;
+        }
+    }
+
+    document.getElementById('add-to-cart-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        var quantity = parseInt(document.getElementById('quantity').value);
+        
+        // Now submit the form using AJAX
+        var formData = new FormData(this);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', this.action);
+        xhr.onload = function() {
+            // Handle response if needed
+            updateCartIcon(); // Update cart icon after successful submission
+        };
+        xhr.send(formData);
+    });
+
+    // Call the function initially to update the cart icon when the page loads
+    updateCartIcon();
+    </script>
+    <?php include "inc/footer.inc.php"; ?>
+</body>
 </html>
