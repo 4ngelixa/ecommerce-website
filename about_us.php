@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+<title>Bling Bling</title>
     <style>
     .bd-placeholder-img {
         font-size: 1.125rem;
@@ -17,7 +18,6 @@
         }
     }
     </style>
-    <title>aboutus</title>
     <?php 
         include "inc/head.inc.php";
     ?>
@@ -39,6 +39,8 @@
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="#777" />
+                        <image xlink:href="images/stock_image_product.jpg" x="0" y="0" height="100%" width="100%"
+                            preserveAspectRatio="none"/>
                     </svg>
 
                     <div class="container">
@@ -53,6 +55,8 @@
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="#777" />
+                        <image xlink:href="images/court_1.jpg" x="0" y="0" height="100%" width="100%"
+                            preserveAspectRatio="none"/>
                     </svg>
 
                     <div class="container">
@@ -100,8 +104,9 @@
                         height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
                         preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#eee" /><text x="50%" y="50%" fill="#aaa"
-                            dy=".3em">500x500</text>
+                        <rect width="100%" height="100%" fill="#eee" />
+                        <image xlink:href="images/five_star.jpg" x="0" y="0" height="100%"
+                            width="100%" preserveAspectRatio="none" />
                     </svg>
 
                 </div>
@@ -120,8 +125,9 @@
                         height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
                         preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#eee" /><text x="50%" y="50%" fill="#aaa"
-                            dy=".3em">500x500</text>
+                        <rect width="100%" height="100%" fill="#eee" />
+                        <image xlink:href="images/contact_us.jpg" x="0" y="0" height="100%"
+                            width="100%" preserveAspectRatio="none" />
                     </svg>
 
                 </div>

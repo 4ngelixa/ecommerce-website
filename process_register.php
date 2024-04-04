@@ -62,8 +62,8 @@
                 $errorMsg .= "Passwords are not the same.<br>";
                 $success = false;
             } else {
-                $pwd = sanitize_input($_POST["pwd"]);
-                $pwd = password_hash($pwd, PASSWORD_DEFAULT);
+                $pwd = sanitize_input($_POST["pwd1"]);
+                $pwd = password_hash($$_POST["pwd1"], PASSWORD_DEFAULT);
             }
         }
         

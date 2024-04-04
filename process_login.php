@@ -117,6 +117,7 @@
                         // Note that email field is unique, so should only have
                         // one row in the result set.
                         $row = $result->fetch_assoc();
+                        $id = $row["member_id"];
                         $fname = $row["fname"];
                         $lname = $row["lname"];
                         $phone = $row["phone"];
@@ -134,6 +135,7 @@
                         else if(password_verify($pwd, $pwd_hashed)) {
                             session_start();
                             session_regenerate_id(true);
+                            $_SESSION["id"] = $id;
                             $_SESSION["fname"] = $fname;
                             $_SESSION["lname"] = $lname;
                             $_SESSION["email"] = $email;

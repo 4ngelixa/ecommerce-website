@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
+<title>Bling Bling</title>
     <style>
     .bd-placeholder-img {
         font-size: 1.125rem;
@@ -17,7 +19,6 @@
         }
     }
     </style>
-    <title>aboutus</title>
     <?php 
         include "inc/head.inc.php";
     ?>
@@ -39,6 +40,8 @@
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="#777" />
+                        <image xlink:href="images/stock_image_product.jpg" x="0" y="0" height="100%" width="100%"
+                            preserveAspectRatio="none"/>
                     </svg>
 
                     <div class="container">
@@ -53,6 +56,8 @@
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="#777" />
+                        <image xlink:href="images/court_1.jpg" x="0" y="0" height="100%" width="100%"
+                            preserveAspectRatio="none"/>
                     </svg>
 
                     <div class="container">
@@ -87,8 +92,9 @@
                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
                         preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777"
-                            dy=".3em">140x140</text>
+                        <rect width="100%" height="100%" fill="#777" />
+                        <image xlink:href="images/circle_about_us.png" x="0" y="0" height="100%" width="100%"
+                            preserveAspectRatio="none" />
                     </svg>
 
                     <h2>About Us</h2>
@@ -100,8 +106,9 @@
                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
                         preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777"
-                            dy=".3em">140x140</text>
+                        <rect width="100%" height="100%" fill="#777" />
+                        <image xlink:href="images/join_us.png" x="0" y="0" height="100%" width="100%"
+                            preserveAspectRatio="none" />
                     </svg>
 
                     <h2>Join Us Now</h2>
@@ -113,8 +120,9 @@
                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
                         preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777"
-                            dy=".3em">140x140</text>
+                        <rect width="100%" height="100%" fill="#777" />
+                        <image xlink:href="images/shop.jpg" x="0" y="0" height="100%" width="100%"
+                            preserveAspectRatio="none" />
                     </svg>
 
                     <h2>Products</h2>
@@ -122,12 +130,12 @@
                     <p><a class="btn btn-secondary" href="products.php">View details &raquo;</a></p>
                 </div><!-- /.col-lg-4 -->
             </div><!-- /.row -->
+        </div><!-- /.container -->
 
-    </main>
-    <?php 
+        <?php 
     include "inc/footer.inc.php";
 ?>
-
+    </main>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
     </script>
