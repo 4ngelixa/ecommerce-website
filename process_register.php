@@ -24,11 +24,11 @@
         $success = true;
 
         //Email
-        if (empty($_POST["email"])) {
+        if (empty($_POST["email1"])) {
             $errorMsg .= "Email is required.<br>";
             $success = false;
         } else {
-            $email = sanitize_input($_POST["email"]);
+            $email = sanitize_input($_POST["email1"]);
 
             // Additional check to make sure e-mail address is well-formed.
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
