@@ -77,7 +77,7 @@ if ($success) {
     <title>
         <?= $success && $product ? htmlspecialchars($product["pname"]) : "Product Not Found"; ?>
     </title>
-    <style scoped>
+    <style>
         /* Define keyframes for animation */
         @keyframes scaleUp {
             0% {
@@ -93,11 +93,38 @@ if ($success) {
             }
         }
 
-        /* Apply animation to the button */
+        /* Apply animation to button */
         button[type="submit"] {
-            /* Your existing styles */
             animation: scaleUp 0.3s ease-in-out;
-            /* Apply animation */
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #closeBtn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        #zoomedImg {
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
         body {
@@ -120,7 +147,7 @@ if ($success) {
             text-align: center;
             padding: 30px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-            margin-right: 160px;
+            margin-right: 50px;
         }
 
         .product-image img {
@@ -128,14 +155,18 @@ if ($success) {
             max-height: 300px;
         }
 
-        .product-name {
+        .product-details {
             flex: 2;
             margin-left: 20px;
-            font-size: 40px;
+        }
+
+        .product-details h1 {
+            font-size: 35px;
+            font-weight: bold;
         }
 
         .product-price {
-            font-size: 30px;
+            font-size: 28px;
             font-weight: bold;
             color: #e44d26;
             margin-bottom: 10px;
@@ -143,30 +174,32 @@ if ($success) {
 
         .product-description {
             margin-bottom: 10px;
+            margin-right: 10px;
             font-weight: normal;
-            font-size: 20px;
-            line-height: 1.2;
-            margin-bottom: 10px;
+            font-size: 18px;
+            line-height: 1.3;
             text-align: justify;
             text-justify: inter-word;
         }
 
         .product-sku,
         .product-stock {
+            padding-top: 5px;
             margin-bottom: 5px;
             color: darkgrey;
             line-height: 1.2;
-            font-size: 20px;
+            font-size: 15px;
+            font-weight: normal;
         }
 
         /* 'Quantity' label */
         form#add-to-cart-form label {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         /* 'Quantity' input field */
         form#add-to-cart-form input[type="number"] {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         /* Add to Cart' button */
@@ -174,11 +207,11 @@ if ($success) {
             background-color: #413ea1;
             color: white;
             border: 1px solid grey;
-            padding: 12px 18px;
-            font-size: 20px;
+            padding: 8px 14px;
+            font-size: 15px;
             text-transform: uppercase;
             cursor: pointer;
-            margin-top: 10px;
+            margin-left: 10px;
             transition: background-color 0.3s, border-color 0.3s;
         }
 
@@ -189,7 +222,13 @@ if ($success) {
         }
 
         .reviews-section {
-            margin-top: 20px;
+            margin: 30px 50px 40px;
+        }
+
+        .reviews-section h2 {
+            font-size: 25px;
+            font-weight: bold;
+            color: #413ea1;
         }
 
         .reviewer-name {
@@ -199,6 +238,7 @@ if ($success) {
         .review-date {
             margin-left: 10px;
             font-size: 0.9em;
+            font-weight: normal;
         }
 
         .review-text {
@@ -220,11 +260,16 @@ if ($success) {
 
     <?php if ($success && $product): ?>
         <div class="product-container">
-            <div class="product-image">
-                <img src="images/<?= strtolower($product["pname"]); ?>.png"
+            <div class="product-image" onclick="zoomImage(this)">
+                <img id="productImg" src="images/<?= strtolower($product["pname"]); ?>.png"
                     alt="<?= htmlspecialchars($product["pname"]); ?>" />
+                <div id="overlay" onclick="closeZoom()" style="display:none;">
+                    <span id="closeBtn" title="Close">&times;</span>
+                    <img src="" id="zoomedImg" alt="Zoomed" />
+                </div>
             </div>
-            <div class="product-name">
+
+            <div class="product-details">
                 <h1>
                     <?= htmlspecialchars($product["pname"]); ?>
                 </h1>
@@ -263,7 +308,7 @@ if ($success) {
         <!-- If there are product details to show -->
         <?php if (!empty($reviews)): ?>
             <div class="reviews-section">
-                <h2>User Reviews</h2>
+                <h2>✧ User Reviews ✧</h2>
                 <?php foreach ($reviews as $review): ?>
                     <div class="review">
                         <span class="reviewer-name">
@@ -279,14 +324,39 @@ if ($success) {
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <center>
-                <p>No reviews yet.</p>
-            </center>
+            <h2 style="font-size: 25px; padding-left: 40px; font-weight: bold; color: #413ea1;">✧ User Reviews ✧</h2>
+            <p style="padding-left: 40px; font-weight = normal;">No reviews yet.</p>
         <?php endif; ?>
     <?php endif; ?>
 
 
     <script>
+        // function to zoom product image
+        function zoomImage(imageContainer) {
+            var imgSrc = imageContainer.querySelector('img').src; // Get the source of the image to be zoomed
+            var overlay = document.getElementById('overlay');
+            var zoomedImg = document.getElementById('zoomedImg');
+
+            zoomedImg.src = imgSrc; // Set the source for the zoomed image
+            overlay.style.display = 'flex'; // Display the overlay with flex to center the image
+        }
+
+        function closeZoom() {
+            var overlay = document.getElementById('overlay');
+            overlay.style.display = 'none'; // Hide the overlay
+        }
+
+        // Ensure that the overlay is closed when the close button is clicked.
+        document.getElementById('closeBtn').onclick = function (event) {
+            closeZoom();
+            event.stopPropagation(); // Prevent the event from bubbling up to the image container
+        }
+
+        // Prevent the overlay from closing when the zoomed image itself is clicked
+        document.getElementById('zoomedImg').onclick = function (event) {
+            event.stopPropagation();
+        }
+
         // Function to calculate total quantity in the cart
         function updateCartIcon() {
             var totalQuantity = 0;
