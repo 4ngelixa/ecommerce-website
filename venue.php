@@ -24,9 +24,16 @@ if (!$config) {
 }
 
 // Proceed with database operations if successful
-if ($success) {
-    $sql = "SELECT product_id, pname, price FROM product";
-    $result = $conn->query($sql);
+session_start(); // Start the session at the very top of the script
+
+// Fetch venues
+$venuesQuery = "SELECT venue_id, venue_name FROM venue";
+$venuesResult = $conn->query($venuesQuery);
+$venues = [];
+if ($venuesResult) {
+    while ($row = $venuesResult->fetch_assoc()) {
+        $venues[] = $row;
+    }
 }
 ?>
 
@@ -39,6 +46,10 @@ if ($success) {
     include "inc/head.inc.php";
     ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
         .card-header .btn-link {
             color: inherit;
@@ -230,107 +241,86 @@ if ($success) {
             <div class="card-body">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" id="bookingTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all"
-                            type="button" role="tab" aria-controls="all" aria-selected="true">All Venues</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="venue1-tab" data-bs-toggle="tab" data-bs-target="#venue1"
-                            type="button" role="tab" aria-controls="venue1" aria-selected="false">Serangoon Chu Kang
-                            Stadium</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="venue2-tab" data-bs-toggle="tab" data-bs-target="#venue2"
-                            type="button" role="tab" aria-controls="venue2" aria-selected="false">Yio Hougang Sports
-                            Hall</button>
-                    </li>
+                    <?php foreach ($venues as $index => $venue): ?>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link <?= $index === 0 ? 'active' : '' ?>"
+                                id="venue<?= $venue['venue_id'] ?>-tab" data-bs-toggle="tab"
+                                data-bs-target="#venue<?= $venue['venue_id'] ?>" type="button" role="tab"
+                                aria-controls="venue<?= $venue['venue_id'] ?>"
+                                aria-selected="<?= $index === 0 ? 'true' : 'false' ?>">
+                                <?= htmlspecialchars($venue['venue_name']) ?>
+                            </button>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
-                <!-- Tab panes -->
+
                 <div class="tab-content" id="bookingTabsContent">
-                    <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
-                        <ul class="list-group list-group-flush">
-                            <!-- Dynamically generate all bookings list -->
-                            <?php
-                            // Here, you would query your database and loop through all bookings
-                            // For placeholder purposes, static entries are shown
-                            echo "<li class='list-group-item d-flex justify-content-between align-items-center'>
-                            Yio Hougang Sports Hall - 5th April 11:00-13:00
-                            <a href='#' class='btn btn-danger btn-sm' role='button' aria-label='Cancel Booking'
-                            onclick='return confirm(`Are you sure you want to cancel this booking?`);'>
-                            <i class='fas fa-times'></i></a></li>";
-                            // echo "<li class='list-group-item'>Booking ID: {$booking['booking_id']} - Date: {$booking['booking_date']}</li>";
-                            echo "<li class='list-group-item'>All Venues - Placeholder Booking 2</li>";
-                            ?>
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="venue1" role="tabpanel" aria-labelledby="venue1-tab">
-                        <ul class="list-group list-group-flush">
-                            <!-- Dynamically generate bookings for Venue 1 -->
-                            <?php
-                            // Placeholder bookings for Venue 1
-                            foreach ($bookings as $booking) {
-                                if ($booking['venue_id'] == 1) { // Assuming $bookings is fetched with venue IDs
-                                    echo "<li class='list-group-item'>Booking ID: {$booking['booking_id']} - Date: {$booking['booking_date']}</li>";
+                    <?php foreach ($venues as $index => $venue): ?>
+                        <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>"
+                            id="venue<?= $venue['venue_id'] ?>" role="tabpanel"
+                            aria-labelledby="venue<?= $venue['venue_id'] ?>-tab">
+                            <ul class="list-group list-group-flush">
+                                <?php
+                                $bookingsQuery = "SELECT booking_id, booking_date, timeslot_id FROM venue_bookings WHERE venue_id = ?";
+                                $stmt = $conn->prepare($bookingsQuery);
+                                $stmt->bind_param("i", $venue['venue_id']);
+                                $stmt->execute();
+                                $bookingsResult = $stmt->get_result();
+                                if ($bookingsResult->num_rows > 0) {
+                                    while ($booking = $bookingsResult->fetch_assoc()) {
+                                        // Assume resolveTimeslot is a function you've written to convert timeslot_id to readable time slots
+                                        // list($startTime, $endTime) = resolveTimeslot($booking['timeslot_id']);
+                                        echo "<li class='list-group-item'>Booking ID: " . htmlspecialchars($booking['booking_id']) . " - Date: " . htmlspecialchars($booking['booking_date']) . " Time: </li>";
+                                    }
+                                } else {
+                                    echo "<li class='list-group-item'>No bookings available</li>";
                                 }
-                            }
-                            ?>
-                        </ul>
-                    </div>
-                    <div class="tab-pane fade" id="venue2" role="tabpanel" aria-labelledby="venue2-tab">
-                        <ul class="list-group list-group-flush">
-                            <!-- Dynamically generate bookings for Venue 2 -->
-                            <?php
-                            // Placeholder bookings for Venue 2
-                            foreach ($bookings as $booking) {
-                                if ($booking['venue_id'] == 2) { // Adjust based on your data
-                                    echo "<li class='list-group-item'>Booking ID: {$booking['booking_id']} - Date: {$booking['booking_date']}</li>";
-                                }
-                            }
-                            ?>
-                        </ul>
-                    </div>
+                                $stmt->close();
+                                ?>
+                            </ul>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
 
-        <div id="accordion">
-            <div class="card">
-                <div class="card-header" id="headingOne">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                            aria-expanded="true" aria-controls="collapseOne">
-                            Serangoon Chu Kang Stadium
-                        </button>
-                    </h5>
-                </div>
-
-                <div id="collapseOne" class="show" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body">
-                        <?php
-                        $month = isset($_GET['month']) ? $_GET['month'] : date('m');
-                        $year = isset($_GET['year']) ? $_GET['year'] : date('Y');
-                        echo build_calendar($month, $year);
-                        ?>
+        <div class="row">
+            <?php foreach ($venues as $venue): ?>
+                <div class="col-12 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <?= htmlspecialchars($venue['venue_name']) ?>
+                        </div>
+                        <div class="card-body">
+                            <?php
+                            // Determine the month and year to display
+                            $month = isset($_SESSION['current_month']) ? $_SESSION['current_month'] : date('m');
+                            $year = isset($_SESSION['current_year']) ? $_SESSION['current_year'] : date('Y');
+                            // Display the calendar for this venue
+                            echo build_calendar($month, $year, $venue['venue_id'], $conn);
+                            ?>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
+        </div>
 
-            <div class="card">
-                <div class="card-header" id="headingTwo">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="false" aria-controls="collapseTwo">
-                            Yio Hougang Sports Hall
+        <!-- Timeslot Modal -->
+        <div class="modal fade" id="timeslotModal" tabindex="-1" role="dialog" aria-labelledby="timeslotModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="timeslotModalLabel">Available Timeslots</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
                         </button>
-                    </h5>
-                </div>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                    <div class="card-body">
-                        <?php
-                        $month = isset($_GET['month']) ? $_GET['month'] : date('m');
-                        $year = isset($_GET['year']) ? $_GET['year'] : date('Y');
-                        echo build_calendar($month, $year);
-                        ?>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Timeslot details will be loaded here dynamically -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -344,7 +334,7 @@ if ($success) {
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
         </script>
-    <script defer src="js/main.js"></script>
+    <script defer src="js/venue.js"></script>
     <?php
     // Close the database connection if it was successful
     if ($success) {
@@ -356,8 +346,22 @@ if ($success) {
 </html>
 
 <?php
-function build_calendar($month, $year)
+function build_calendar($month, $year, $venue_id, $conn)
 {
+    // Adjust the query to fetch bookings for the given venue and month/year
+    $startDate = "$year-$month-01";
+    $endDate = date("Y-m-t", strtotime($startDate));
+    $sql = "SELECT booking_date FROM venue_bookings WHERE venue_id = ? AND booking_date BETWEEN ? AND ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iss", $venue_id, $startDate, $endDate);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $bookings = [];
+    while ($row = $result->fetch_assoc()) {
+        // Assuming booking_date is in 'YYYY-MM-DD' format
+        $bookings[] = $row['booking_date'];
+    }
+
     // Simulated bookings array for testing
     $bookings = array(
         date('Y-m-') . '08',
@@ -421,7 +425,7 @@ function build_calendar($month, $year)
             $calendar .= "<td class='$today'><h4>$currentDay</h4> <span class='btn btn-danger btn-xs'>Booked</span></td>";
         } else {
             // Mark as available
-            $calendar .= "<td class='$today'><h4>$currentDay</h4> <a href='venue_booking.php?date=$date' class='btn btn-success btn-xs'>Book Now</a></td>";
+            $calendar .= "<td class='$today'><h4>$currentDay</h4> <button class='btn btn-success btn-xs' data-toggle='modal' data-target='#timeslotModal' onclick='loadTimeslots(\"$date\", $venue_id)'>Book Now</button></td>";
         }
 
         // Increment counters
