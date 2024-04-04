@@ -50,6 +50,10 @@ if ($venuesResult) {
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+        </script>
+    <script src="js/venue.js"></script>
     <style>
         .card-header .btn-link {
             color: inherit;
@@ -331,10 +335,7 @@ if ($venuesResult) {
     include "inc/footer.inc.php";
     ?>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
-        </script>
-    <script defer src="js/venue.js"></script>
+
     <?php
     // Close the database connection if it was successful
     if ($success) {
@@ -425,7 +426,7 @@ function build_calendar($month, $year, $venue_id, $conn)
             $calendar .= "<td class='$today'><h4>$currentDay</h4> <span class='btn btn-danger btn-xs'>Booked</span></td>";
         } else {
             // Mark as available
-            $calendar .= "<td class='$today'><h4>$currentDay</h4> <button class='btn btn-success btn-xs' data-toggle='modal' data-target='#timeslotModal' onclick='loadTimeslots(\"$date\", $venue_id)'>Book Now</button></td>";
+            $calendar .= "<td class='$today'><h4>$currentDay</h4> <button class='btn btn-success btn-xs' data-toggle='modal' data-target='#timeslotModal' data-date='$date' data-venue='$venue_id'>Book Now</button></td>";
         }
 
         // Increment counters

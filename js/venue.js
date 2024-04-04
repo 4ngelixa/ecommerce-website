@@ -48,3 +48,28 @@
 //         }
 //     });
 // };
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll("button[data-date][data-venue]").forEach(button => {
+        button.addEventListener('click', function() {
+            loadTimeslots(this);
+        });
+    });
+});
+
+function loadTimeslots(buttonElement) {
+    var date = buttonElement.getAttribute('data-date');
+    var venueId = buttonElement.getAttribute('data-venue');
+
+    fetch(`fetch_timeslots.php?date=${date}&venue_id=${venueId}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error("Error:", data.error);
+        } else {
+            // Now we set the innerHTML to the 'html' part of our response
+            document.querySelector('#timeslotModal .modal-body').innerHTML = data.html;
+        }
+    })
+    .catch(error => console.error("Fetch error:", error));
+}
