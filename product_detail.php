@@ -1,7 +1,29 @@
 <?php
+session_start(); // Start a new session or resume the existing one
+
 // Initialize error message and success flag
 $errorMsg = '';
 $success = true;
+$reviewPosted = false; // Flag to check if the review was posted
+
+// Enable error reporting for debugging (remove this in production)
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+// Prevent caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+// Function to check if user is logged in
+function isLoggedIn()
+{
+    return isset($_SESSION['member_id']); // Assuming 'member_id' is set in $_SESSION when a user logs in
+}
+
+// Include dependencies
+include "inc/head.inc.php";
+include "inc/nav.inc.php";
 
 // Create database connection
 $config = parse_ini_file('/var/www/private/db-config.ini');
@@ -20,6 +42,41 @@ if (!$config) {
     if ($conn->connect_error) {
         $errorMsg = "Connection failed: " . $conn->connect_error;
         $success = false;
+    }
+}
+
+// Handle review submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['review'])) {
+    if (!isLoggedIn()) {
+        // If the user is not logged in, redirect to the login page
+        header('Location: authentication.php');
+        exit();
+    } else {
+        // The user is logged in, prepare to insert the review
+        $memberID = $_SESSION['member_id']; // Replace with actual session variable
+        $review = trim($_POST['review']);
+        $productID = $_POST['product_id']; // Included as a hidden input in the form
+
+        if (empty($review)) {
+            $errorMsg = "Review cannot be empty.";
+            $success = false;
+        } else {
+            // Insert the review into the database
+            $insertReviewSQL = "INSERT INTO product_review (product_id, member_id, review, review_date) VALUES (?, ?, ?, NOW())";
+            if ($stmt = $conn->prepare($insertReviewSQL)) {
+                $stmt->bind_param("iis", $productID, $memberID, $review);
+                if ($stmt->execute()) {
+                    $reviewPosted = true; // Set the flag to true as the review has been posted
+                } else {
+                    $errorMsg = "Error submitting the review: " . $stmt->error;
+                    $success = false;
+                }
+                $stmt->close();
+            } else {
+                $errorMsg = "Failed to prepare the statement.";
+                $success = false;
+            }
+        }
     }
 }
 
@@ -63,9 +120,15 @@ if ($success) {
         }
     }
 
+    // If review was posted successfully, show a pop-up message
+    if ($reviewPosted) {
+        echo "<script>alert('Your review has been posted successfully.');</script>";
+    }
+
     // Close the database connection
     $conn->close();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -267,9 +330,6 @@ if ($success) {
 </head>
 
 <body>
-    <?php include "inc/head.inc.php"; ?>
-    <?php include "inc/nav.inc.php"; ?>
-
     <div style="padding-left: 30px; margin-top: 40px;">
         <a href="products.php" style="text-decoration: none; color: #413ea1; font-weight: bold;">&larr; Back to
             Products</a>
@@ -322,95 +382,103 @@ if ($success) {
 
     <!-- User Reviews !-->
     <?php if ($success && $product): ?>
-        <!-- If there are product details to show -->
-        <?php if (!empty($reviews)): ?>
-            <div class="reviews-section">
-                <h2>✧ User Reviews ✧</h2>
-                <?php foreach ($reviews as $review): ?>
-                    <div class="review">
-                        <span class="reviewer-name">
-                            <?= htmlspecialchars($review['fname'] . ' ' . $review['lname']); ?>
-                        </span>
-                        <span class="review-date" style="color: grey;">
-                            <?= date("F j, Y, g:i a", strtotime($review['review_date'])); ?>
-                        </span>
-                        <p class="review-text">
-                            <?= nl2br(htmlspecialchars($review['review'])); ?>
-                        </p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php else: ?>
-            <h2 style="font-size: 25px; padding-left: 40px; font-weight: bold; color: #413ea1;">✧ User Reviews ✧</h2>
-            <p style="padding-left: 40px; font-weight = normal;">No reviews yet.</p>
-        <?php endif; ?>
-    <?php endif; ?>
+        <div class="reviews-section">
+            <h2>✧ Write a Review ✧</h2>
+            <form method="post" action="product_detail.php?id=<?= $productID; ?>">
+                <textarea name="review" required placeholder="Write your review here..."></textarea>
+                <input type="hidden" name="product_id" value="<?= $productID; ?>">
+                <button type="submit">Submit Review</button>
+            </form>
 
-
-    <script>
-        // function to zoom product image
-        function zoomImage(imageContainer) {
-            var imgSrc = imageContainer.querySelector('img').src; // Get the source of the image to be zoomed
-            var overlay = document.getElementById('overlay');
-            var zoomedImg = document.getElementById('zoomedImg');
-
-            zoomedImg.src = imgSrc; // Set the source for the zoomed image
-            overlay.style.display = 'flex'; // Display the overlay with flex to center the image
-        }
-
-        function closeZoom() {
-            var overlay = document.getElementById('overlay');
-            overlay.style.display = 'none'; // Hide the overlay
-        }
-
-        // Ensure that the overlay is closed when the close button is clicked.
-        document.getElementById('closeBtn').onclick = function (event) {
-            closeZoom();
-            event.stopPropagation(); // Prevent the event from bubbling up to the image container
-        }
-
-        // Prevent the overlay from closing when the zoomed image itself is clicked
-        document.getElementById('zoomedImg').onclick = function (event) {
-            event.stopPropagation();
-        }
-
-        // Function to calculate total quantity in the cart
-        function updateCartIcon() {
-            var totalQuantity = 0;
-            <?php if (isset($_SESSION['cart'])): ?>
-                <?php foreach ($_SESSION['cart'] as $productId => $quantity): ?>
-                    totalQuantity += <?= $quantity ?>;
-                <?php endforeach; ?>
+            <!-- If there are product details to show -->
+            <?php if (!empty($reviews)): ?>
+                <div class="reviews-section">
+                    <h2>✧ User Reviews ✧</h2>
+                    <?php foreach ($reviews as $review): ?>
+                        <div class="review">
+                            <span class="reviewer-name">
+                                <?= htmlspecialchars($review['fname'] . ' ' . $review['lname']); ?>
+                            </span>
+                            <span class="review-date" style="color: grey;">
+                                <?= date("F j, Y, g:i a", strtotime($review['review_date'])); ?>
+                            </span>
+                            <p class="review-text">
+                                <?= nl2br(htmlspecialchars($review['review'])); ?>
+                            </p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <h2 style="font-size: 25px; padding-left: 40px; font-weight: bold; color: #413ea1;">✧ User Reviews ✧</h2>
+                <p style="padding-left: 40px; font-weight = normal;">No reviews yet.</p>
             <?php endif; ?>
+        <?php endif; ?>
 
-            // Update the cart icon in the navbar
-            var cartIcon = document.getElementById('cart-icon');
-            if (cartIcon) {
-                cartIcon.innerText = totalQuantity;
+
+        <script>
+            // function to zoom product image
+            function zoomImage(imageContainer) {
+                var imgSrc = imageContainer.querySelector('img').src; // Get the source of the image to be zoomed
+                var overlay = document.getElementById('overlay');
+                var zoomedImg = document.getElementById('zoomedImg');
+
+                zoomedImg.src = imgSrc; // Set the source for the zoomed image
+                overlay.style.display = 'flex'; // Display the overlay with flex to center the image
             }
-        }
 
-        // Function to handle form submission using AJAX
-        document.getElementById('add-to-cart-form').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent form submission
-            var quantity = parseInt(document.getElementById('quantity').value);
+            function closeZoom() {
+                var overlay = document.getElementById('overlay');
+                overlay.style.display = 'none'; // Hide the overlay
+            }
 
-            // Now submit the form using AJAX
-            var formData = new FormData(this);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.action);
-            xhr.onload = function () {
-                // Handle response if needed
-                updateCartIcon(); // Update cart icon after successful submission
-            };
-            xhr.send(formData);
-        });
+            // Ensure that the overlay is closed when the close button is clicked.
+            document.getElementById('closeBtn').onclick = function (event) {
+                closeZoom();
+                event.stopPropagation(); // Prevent the event from bubbling up to the image container
+            }
 
-        // Call the function initially to update the cart icon when the page loads
-        updateCartIcon();
-    </script>
+            // Prevent the overlay from closing when the zoomed image itself is clicked
+            document.getElementById('zoomedImg').onclick = function (event) {
+                event.stopPropagation();
+            }
 
-    <?php include "inc/footer.inc.php"; ?>
+            // Function to calculate total quantity in the cart
+            function updateCartIcon() {
+                var totalQuantity = 0;
+                <?php if (isset($_SESSION['cart'])): ?>
+                    <?php foreach ($_SESSION['cart'] as $productId => $quantity): ?>
+                        totalQuantity += <?= $quantity ?>;
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+                // Update the cart icon in the navbar
+                var cartIcon = document.getElementById('cart-icon');
+                if (cartIcon) {
+                    cartIcon.innerText = totalQuantity;
+                }
+            }
+
+            // Function to handle form submission using AJAX
+            document.getElementById('add-to-cart-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form submission
+                var quantity = parseInt(document.getElementById('quantity').value);
+
+                // Now submit the form using AJAX
+                var formData = new FormData(this);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', this.action);
+                xhr.onload = function () {
+                    // Handle response if needed
+                    updateCartIcon(); // Update cart icon after successful submission
+                };
+                xhr.send(formData);
+            });
+
+            // Call the function initially to update the cart icon when the page loads
+            updateCartIcon();
+        </script>
+
+        <?php include "inc/footer.inc.php"; ?>
 </body>
 
 </html>
