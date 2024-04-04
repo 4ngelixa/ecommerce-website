@@ -3,6 +3,17 @@
 $errorMsg = '';
 $success = true;
 
+session_start(); // Ensure session start is at the top
+
+// Make sure there is a member_id in the session
+if (!isset($_SESSION['id'])) {
+    echo json_encode(['error' => 'Member not logged in']);
+    exit;
+}
+
+// Retrieve member_id from the session
+$memberId = $_SESSION['id'];
+
 // Create database connection
 $config = parse_ini_file('/var/www/private/db-config.ini');
 if (!$config) {
@@ -320,11 +331,19 @@ if ($venuesResult) {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <!-- Inside your modal-body div -->
+                    <div id="timeslotSelection" class="modal-body">
                         <!-- Timeslot details will be loaded here dynamically -->
                     </div>
+
+                    <!-- Inside your modal-footer div -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form id="timeslotForm" onsubmit="bookTimeslots(event)">
+                            <input type="hidden" id="selectedTimeslots" name="selectedTimeslots">
+                            <input type="hidden" id="venueId" name="venueId">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Book</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -349,40 +368,31 @@ if ($venuesResult) {
 <?php
 function build_calendar($month, $year, $venue_id, $conn)
 {
-    // Adjust the query to fetch bookings for the given venue and month/year
+    $totalTimeslots = 8; // Assuming there are 8 timeslots available per day.
+
     $startDate = "$year-$month-01";
     $endDate = date("Y-m-t", strtotime($startDate));
-    $sql = "SELECT booking_date FROM venue_bookings WHERE venue_id = ? AND booking_date BETWEEN ? AND ?";
-    $stmt = $conn->prepare($sql);
+    $bookingsQuery = "SELECT booking_date, COUNT(*) as booking_count 
+                      FROM venue_bookings 
+                      WHERE venue_id = ? AND booking_date BETWEEN ? AND ? 
+                      GROUP BY booking_date";
+
+    $stmt = $conn->prepare($bookingsQuery);
     $stmt->bind_param("iss", $venue_id, $startDate, $endDate);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $bookings = [];
-    while ($row = $result->fetch_assoc()) {
-        // Assuming booking_date is in 'YYYY-MM-DD' format
-        $bookings[] = $row['booking_date'];
+    $bookingsResult = $stmt->get_result();
+
+    $bookingsByDate = [];
+    while ($row = $bookingsResult->fetch_assoc()) {
+        $bookingsByDate[$row['booking_date']] = $row['booking_count'];
     }
 
-    // Simulated bookings array for testing
-    $bookings = array(
-        date('Y-m-') . '08',
-        date('Y-m-') . '15',
-        date('Y-m-') . '20',
-    );
-
-    // Array holding names of days of the week
-    $daysOfWeek = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-    // Getting the first day of the month
+    $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     $firstDayOfMonth = mktime(0, 0, 0, $month, 1, $year);
-    // Getting the number of days in the month
     $numberDays = date('t', $firstDayOfMonth);
-    // Getting some information about the first day of the month
     $dateComponents = getdate($firstDayOfMonth);
-    // Month name for display
     $monthName = $dateComponents['month'];
-    // Finding out the day of the week of the first day of the month
     $dayOfWeek = $dateComponents['wday'];
-    // Today's date
     $datetoday = date('Y-m-d');
 
     // Starting the HTML table for the calendar
@@ -409,32 +419,28 @@ function build_calendar($month, $year, $venue_id, $conn)
 
     $currentDay = 1;
     while ($currentDay <= $numberDays) {
-        // If Sunday, start a new row
         if ($dayOfWeek == 7) {
             $dayOfWeek = 0;
             $calendar .= "</tr><tr>";
         }
 
-        // Current day in 'YYYY-MM-DD' format
-        $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
-        $date = "$year-$month-$currentDayRel";
+        $date = "$year-$month-" . str_pad($currentDay, 2, '0', STR_PAD_LEFT);
+        $todayClass = ($date == $datetoday) ? "today" : "";
 
-        // Class for today's date
-        $today = $date == $datetoday ? "today" : "";
-        if (in_array($date, $bookings)) {
-            // Mark as booked
-            $calendar .= "<td class='$today'><h4>$currentDay</h4> <span class='btn btn-danger btn-xs'>Booked</span></td>";
+        $calendar .= "<td class='$todayClass'><h4>$currentDay</h4>";
+
+        if (isset($bookingsByDate[$date]) && $bookingsByDate[$date] >= $totalTimeslots) {
+            $calendar .= "<span class='btn btn-danger btn-xs'>Booked</span>";
         } else {
-            // Mark as available
-            $calendar .= "<td class='$today'><h4>$currentDay</h4> <button class='btn btn-success btn-xs' data-toggle='modal' data-target='#timeslotModal' data-date='$date' data-venue='$venue_id'>Book Now</button></td>";
+            $calendar .= "<button class='btn btn-success btn-xs' data-toggle='modal' data-target='#timeslotModal' data-date='$date' data-venue='$venue_id'>Book Now</button>";
         }
 
-        // Increment counters
+        $calendar .= "</td>";
+
         $currentDay++;
         $dayOfWeek++;
     }
 
-    // Complete the row of the last week in month if necessary
     if ($dayOfWeek != 7) {
         $remainingDays = 7 - $dayOfWeek;
         for ($i = 0; $i < $remainingDays; $i++) {
@@ -442,10 +448,83 @@ function build_calendar($month, $year, $venue_id, $conn)
         }
     }
 
-    $calendar .= "</tr>";
-    $calendar .= "</table>";
+    $calendar .= "</tr></table>";
+    return $calendar;
+}
+?>
 
-    // Returning the calendar HTML to be echoed
+<?php
+function build_calendar2($month, $year, $venue_id, $conn)
+{
+    $totalTimeslots = 8; // Assuming there are 8 timeslots available each day.
+
+    // Adjust the query to fetch bookings for the given venue and month/year
+    $startDate = "$year-$month-01";
+    $endDate = date("Y-m-t", strtotime($startDate));
+
+    // Count the number of bookings for each day within the specified range
+    $bookingsQuery = "SELECT booking_date, COUNT(*) AS bookings_count 
+                      FROM venue_bookings 
+                      WHERE venue_id = ? AND booking_date BETWEEN ? AND ? 
+                      GROUP BY booking_date";
+
+    $stmt = $conn->prepare($bookingsQuery);
+    $stmt->bind_param("iss", $venue_id, $startDate, $endDate);
+    $stmt->execute();
+    $bookingsResult = $stmt->get_result();
+
+    // Convert bookings result into a dictionary with date as key and bookings count as value
+    $bookingsByDate = [];
+    while ($row = $bookingsResult->fetch_assoc()) {
+        $bookingsByDate[$row['booking_date']] = $row['bookings_count'];
+    }
+
+    // Calendar setup...
+    $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    $firstDayOfMonth = mktime(0, 0, 0, $month, 1, $year);
+    $numberDays = date('t', $firstDayOfMonth);
+    $dateComponents = getdate($firstDayOfMonth);
+    $monthName = $dateComponents['month'];
+    $dayOfWeek = $dateComponents['wday'];
+    $datetoday = date('Y-m-d');
+    $calendar = "<table class='table table-bordered'>"; // Start of calendar HTML
+
+    // Calendar header and navigation buttons...
+
+    $currentDay = 1;
+    while ($currentDay <= $numberDays) {
+        if ($dayOfWeek == 7) {
+            $dayOfWeek = 0;
+            $calendar .= "</tr><tr>"; // Start a new row
+        }
+
+        $date = "$year-$month-" . str_pad($currentDay, 2, '0', STR_PAD_LEFT);
+        $todayClass = $date == $datetoday ? "today" : "";
+
+        // Check if the number of bookings for this day reaches the total timeslots
+        $isFullyBooked = isset($bookingsByDate[$date]) && $bookingsByDate[$date] >= $totalTimeslots;
+
+        $calendar .= "<td class='$todayClass'><h4>$currentDay</h4>";
+        if ($isFullyBooked) {
+            $calendar .= "<span class='btn btn-danger btn-xs'>Booked</span>";
+        } else {
+            $calendar .= "<button class='btn btn-success btn-xs' data-toggle='modal' data-target='#timeslotModal' data-date='$date' data-venue='$venue_id'>Book Now</button>";
+        }
+        $calendar .= "</td>";
+
+        $currentDay++;
+        $dayOfWeek++;
+    }
+
+    // Fill in the last row with empty cells if needed
+    if ($dayOfWeek != 0) {
+        while ($dayOfWeek < 7) {
+            $calendar .= "<td class='empty'></td>";
+            $dayOfWeek++;
+        }
+    }
+
+    $calendar .= "</tr></table>"; // End of calendar HTML
     return $calendar;
 }
 ?>

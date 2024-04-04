@@ -44,7 +44,8 @@ if ($date && $venueId) {
 
     while ($row = $timeslotsResult->fetch_assoc()) {
         if (!in_array($row['timeslot_id'], $bookedSlots)) {
-            $htmlContent .= "<div>Time: " . $row['start_time'] . " - " . $row['end_time'] . " <button class='book-timeslot'>Book</button></div>";
+            // Inside your loop that generates buttons
+            $htmlContent .= "<button type='button' class='btn btn-outline-primary timeslot-btn' data-timeslot-id='{$row['timeslot_id']}' data-date='{$date}' data-venue-id='{$venueId}'>{$row['start_time']} - {$row['end_time']}</button>";
         }
     }
 }
