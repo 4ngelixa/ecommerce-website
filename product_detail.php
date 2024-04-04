@@ -246,6 +246,23 @@ if ($success) {
             line-height: 1.4;
             font-weight: normal;
         }
+
+        /* Media query for smaller screens */
+        @media only screen and (max-width: 768px) {
+            .product-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .product-image {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .product-details {
+                margin-left: 0;
+            }
+        }
     </style>
 </head>
 
