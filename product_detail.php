@@ -60,24 +60,28 @@ if ($success) {
     <style scoped>
         /* Define keyframes for animation */
         @keyframes scaleUp {
-          0% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.1);
-          }
-          100% {
-            transform: scale(1);
-          }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* Apply animation to the button */
         button[type="submit"] {
-          /* Your existing styles */
-          animation: scaleUp 0.3s ease-in-out; /* Apply animation */
+            /* Your existing styles */
+            animation: scaleUp 0.3s ease-in-out;
+            /* Apply animation */
         }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             padding: 0;
             margin: 0;
             position: relative;
@@ -106,6 +110,8 @@ if ($success) {
         .product-details {
             flex: 2;
             margin-left: 20px;
+            font-size: 2em;
+            font-weight: 700;
         }
 
         .product-price {
@@ -117,7 +123,9 @@ if ($success) {
 
         .product-description {
             margin-bottom: 10px;
-            font-size: 20px;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 10px;
         }
 
         .product-sku,
@@ -127,8 +135,7 @@ if ($success) {
         }
 
         button {
-            background-color: #007bff;
-            border: none;
+            border: 1px;
             color: white;
             padding: 10px 20px;
             text-transform: uppercase;
@@ -160,15 +167,18 @@ if ($success) {
             border: none;
             cursor: pointer;
         }
-        
     </style>
 </head>
 
 <body>
     <?php include "inc/head.inc.php"; ?>
     <?php include "inc/nav.inc.php"; ?>
+
+    <div style="padding-left: 30px; margin-top: 40px;">
+        <a href="products.php" style="text-decoration: none; color: #413ea1; font-weight: bold;">&larr; Back to Products</a>
+    </div>
+
     <?php if ($success && $product): ?>
-        <button class="back-button" onclick="location.href='product_catalogue.php'">Back to Products</button>
         <div class="product-container">
             <div class="product-image">
                 <img src="images/<?= strtolower($product["pname"]); ?>.png"
@@ -198,7 +208,6 @@ if ($success) {
                     <input type="number" id="quantity" name="quantity" value="1" min="0" max="100">
                     <button type="submit">Add to Cart</button>
                 </form>
-
             </div>
         </div>
     <?php else: ?>
@@ -208,42 +217,43 @@ if ($success) {
     <?php endif; ?>
 
     <script>
-    // Function to calculate total quantity in the cart
-    function updateCartIcon() {
-        var totalQuantity = 0;
-        <?php if(isset($_SESSION['cart'])): ?>
-            <?php foreach ($_SESSION['cart'] as $productId => $quantity): ?>
-                totalQuantity += <?= $quantity ?>;
-            <?php endforeach; ?>
-        <?php endif; ?>
+        // Function to calculate total quantity in the cart
+        function updateCartIcon() {
+            var totalQuantity = 0;
+            <?php if (isset($_SESSION['cart'])): ?>
+                <?php foreach ($_SESSION['cart'] as $productId => $quantity): ?>
+                    totalQuantity += <?= $quantity ?>;
+                <?php endforeach; ?>
+            <?php endif; ?>
 
-        // Update the cart icon in the navbar
-        var cartIcon = document.getElementById('cart-icon');
-        if (cartIcon) {
-            cartIcon.innerText = totalQuantity;
+            // Update the cart icon in the navbar
+            var cartIcon = document.getElementById('cart-icon');
+            if (cartIcon) {
+                cartIcon.innerText = totalQuantity;
+            }
         }
-    }
 
-    // Function to handle form submission using AJAX
-    document.getElementById('add-to-cart-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent form submission
-        var quantity = parseInt(document.getElementById('quantity').value);
-        
-        // Now submit the form using AJAX
-        var formData = new FormData(this);
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', this.action);
-        xhr.onload = function() {
-            // Handle response if needed
-            updateCartIcon(); // Update cart icon after successful submission
-        };
-        xhr.send(formData);
-    });
+        // Function to handle form submission using AJAX
+        document.getElementById('add-to-cart-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+            var quantity = parseInt(document.getElementById('quantity').value);
 
-    // Call the function initially to update the cart icon when the page loads
-    updateCartIcon();
-</script>
+            // Now submit the form using AJAX
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.action);
+            xhr.onload = function () {
+                // Handle response if needed
+                updateCartIcon(); // Update cart icon after successful submission
+            };
+            xhr.send(formData);
+        });
+
+        // Call the function initially to update the cart icon when the page loads
+        updateCartIcon();
+    </script>
 
     <?php include "inc/footer.inc.php"; ?>
 </body>
+
 </html>
