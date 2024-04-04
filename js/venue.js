@@ -70,6 +70,7 @@ function loadTimeslots(buttonElement) {
     });
 
     const date = buttonElement.getAttribute('data-date');
+    document.querySelector('#selectedDate').value = date;
     const venueId = buttonElement.getAttribute('data-venue');
     document.querySelector('#venueId').value = venueId; // Set the hidden input's value
 
@@ -108,39 +109,48 @@ function selectTimeslot(timeslotId, element) {
 function bookTimeslots(event) {
     event.preventDefault(); // Prevent the default form submission
 
-    let selectedTimeslots = document.getElementById('selectedTimeslots').value;
+    let selectedTimeslots = document.getElementById('selectedTimeslots').value.split(',');
     let venueId = document.getElementById('venueId').value; // Retrieve venueId from the hidden input
+    let bookingDate = document.getElementById('selectedDate').value; // Retrieve the selected booking date
 
     console.log('Selected Timeslots:', selectedTimeslots);
     console.log('Venue ID:', venueId);
+    console.log('Booking Date:', bookingDate);
 
-    // Here, implement your booking logic
-    // For instance, an AJAX call to a PHP script that processes the booking
-    // Make sure to replace the URL and adjust the data structure as needed
-    fetch('process_booking.php', {
+    // AJAX call to the PHP script that processes the booking
+    fetch('venue_process_booking.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
             venueId: venueId,
-            selectedTimeslots: selectedTimeslots.split(',')
+            selectedTimeslots: selectedTimeslots,
+            bookingDate: bookingDate // Pass the booking date to the server
         }),
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            // Handle success response
-            // For example, display a confirmation message or close the modal
-            let timeslotModal = bootstrap.Modal.getInstance(document.getElementById('timeslotModal'));
-            timeslotModal.hide();
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
         })
-        .catch((error) => {
+        .then(data => {
+            // If the booking was successful, close the modal
+            if (data.success) {
+                console.log('Success:', data);
+                window.location.reload(); // Refresh the page
+            } else if (data.error) {
+                console.error('Booking Error:', data.error);
+                // Optionally, handle/display error to the user here
+            }
+        })
+        .catch(error => {
             console.error('Error:', error);
-            // Handle error response
-            // For example, display an error message to the user
+            // Handle/display error to the user here
         });
 }
+
 
 // Event listener for timeslot button clicks
 document.addEventListener('DOMContentLoaded', (event) => {

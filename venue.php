@@ -5,11 +5,6 @@ $success = true;
 
 session_start(); // Ensure session start is at the top
 
-// Make sure there is a member_id in the session
-if (!isset($_SESSION['id'])) {
-    echo json_encode(['error' => 'Member not logged in']);
-    exit;
-}
 
 // Retrieve member_id from the session
 $memberId = $_SESSION['id'];
@@ -56,11 +51,10 @@ if ($venuesResult) {
     <?php
     include "inc/head.inc.php";
     ?>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
         </script>
@@ -331,18 +325,22 @@ if ($venuesResult) {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <!-- Inside your modal-body div -->
+
                     <div id="timeslotSelection" class="modal-body">
                         <!-- Timeslot details will be loaded here dynamically -->
                     </div>
 
-                    <!-- Inside your modal-footer div -->
                     <div class="modal-footer">
                         <form id="timeslotForm" onsubmit="bookTimeslots(event)">
                             <input type="hidden" id="selectedTimeslots" name="selectedTimeslots">
                             <input type="hidden" id="venueId" name="venueId">
+                            <input type="hidden" id="selectedDate" name="selectedDate">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Book</button>
+                            <?php if (isset($_SESSION['id']) && !empty($_SESSION['id'])): ?>
+                                <button type="submit" class="btn btn-primary">Book</button>
+                            <?php else: ?>
+                                <button type="submit" class="btn btn-primary" disabled>Please log in to book</button>
+                            <?php endif; ?>
                         </form>
                     </div>
                 </div>
@@ -449,82 +447,6 @@ function build_calendar($month, $year, $venue_id, $conn)
     }
 
     $calendar .= "</tr></table>";
-    return $calendar;
-}
-?>
-
-<?php
-function build_calendar2($month, $year, $venue_id, $conn)
-{
-    $totalTimeslots = 8; // Assuming there are 8 timeslots available each day.
-
-    // Adjust the query to fetch bookings for the given venue and month/year
-    $startDate = "$year-$month-01";
-    $endDate = date("Y-m-t", strtotime($startDate));
-
-    // Count the number of bookings for each day within the specified range
-    $bookingsQuery = "SELECT booking_date, COUNT(*) AS bookings_count 
-                      FROM venue_bookings 
-                      WHERE venue_id = ? AND booking_date BETWEEN ? AND ? 
-                      GROUP BY booking_date";
-
-    $stmt = $conn->prepare($bookingsQuery);
-    $stmt->bind_param("iss", $venue_id, $startDate, $endDate);
-    $stmt->execute();
-    $bookingsResult = $stmt->get_result();
-
-    // Convert bookings result into a dictionary with date as key and bookings count as value
-    $bookingsByDate = [];
-    while ($row = $bookingsResult->fetch_assoc()) {
-        $bookingsByDate[$row['booking_date']] = $row['bookings_count'];
-    }
-
-    // Calendar setup...
-    $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    $firstDayOfMonth = mktime(0, 0, 0, $month, 1, $year);
-    $numberDays = date('t', $firstDayOfMonth);
-    $dateComponents = getdate($firstDayOfMonth);
-    $monthName = $dateComponents['month'];
-    $dayOfWeek = $dateComponents['wday'];
-    $datetoday = date('Y-m-d');
-    $calendar = "<table class='table table-bordered'>"; // Start of calendar HTML
-
-    // Calendar header and navigation buttons...
-
-    $currentDay = 1;
-    while ($currentDay <= $numberDays) {
-        if ($dayOfWeek == 7) {
-            $dayOfWeek = 0;
-            $calendar .= "</tr><tr>"; // Start a new row
-        }
-
-        $date = "$year-$month-" . str_pad($currentDay, 2, '0', STR_PAD_LEFT);
-        $todayClass = $date == $datetoday ? "today" : "";
-
-        // Check if the number of bookings for this day reaches the total timeslots
-        $isFullyBooked = isset($bookingsByDate[$date]) && $bookingsByDate[$date] >= $totalTimeslots;
-
-        $calendar .= "<td class='$todayClass'><h4>$currentDay</h4>";
-        if ($isFullyBooked) {
-            $calendar .= "<span class='btn btn-danger btn-xs'>Booked</span>";
-        } else {
-            $calendar .= "<button class='btn btn-success btn-xs' data-toggle='modal' data-target='#timeslotModal' data-date='$date' data-venue='$venue_id'>Book Now</button>";
-        }
-        $calendar .= "</td>";
-
-        $currentDay++;
-        $dayOfWeek++;
-    }
-
-    // Fill in the last row with empty cells if needed
-    if ($dayOfWeek != 0) {
-        while ($dayOfWeek < 7) {
-            $calendar .= "<td class='empty'></td>";
-            $dayOfWeek++;
-        }
-    }
-
-    $calendar .= "</tr></table>"; // End of calendar HTML
     return $calendar;
 }
 ?>
