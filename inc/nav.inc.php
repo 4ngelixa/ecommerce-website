@@ -20,55 +20,86 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
 
     <!-- Navbar items -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        
+        <!-- Nav links -->
+        <?php 
+        if ($_SESSION['admin'] == "admin") {
+            echo '
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile.php"><i class="fa-solid fa-lock"></i> Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout.php"><i class="fa-solid fa-sign-hanging"></i> Sign Out</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/venue.php"><i class="fa-solid fa-box"></i> Venue</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin_panel.php"><i class="fa-solid fa-cog"></i> Admin Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span><?php echo $num_items_in_cart; ?></span></a>
+                </li>
+            </ul>
+            ';
+        } else if(isset($_SESSION['fname'])) {
+            echo '
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile.php"><i class="fa-solid fa-lock"></i> Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout.php"><i class="fa-solid fa-sign-hanging"></i> Sign Out</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/venue.php"><i class="fa-solid fa-box"></i> Venue</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span><?php echo $num_items_in_cart; ?></span></a>
+                </li>
+            </ul>
+            ';
+        } else {
+            echo '
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/authentication.php"><i class="fa-solid fa-lock"></i> Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/authentication.php"><i class="fa-solid fa-sign-hanging"></i> Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/venue.php"><i class="fa-solid fa-box"></i> Venue</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span><?php echo $num_items_in_cart; ?></span></a>
+                </li>
+            </ul>
+            ';
+        }
+        ?>
     </div>
 
-    <!-- Menu icon moved to the right -->
-    <span id="menu-icon">
-        <i class="fa-solid fa-bars"></i>
-    </span>
-
-    <?php 
-    if ($_SESSION['admin'] == "admin") {
-        echo '
-        <!-- Side Nav Menu -->
-        <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
-            <a href="/profile.php"> <i class="fa-solid fa-lock"></i> Profile</a>
-            <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i> Sign Out</a>
-            <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
-            <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
-            <a href="/venue.php"><i class="fa-solid fa-sign-hanging"></i> Venue</a>
-            <a href="/admin_panel.php"><i class="fa-solid fa-cog"></i> Admin Panel</a>
-            <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
-
-        </div>
-        ';
-    } else if(isset($_SESSION['fname'])) {
-        echo '
-        <!-- Side Nav Menu -->
-        <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
-        <a href="/profile.php"> <i class="fa-solid fa-lock"></i> Profile</a>
-        <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i> Sign Out</a>
-        <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
-        <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
-        <a href="/venue.php"><i class="fa-solid fa-sign-hanging"></i> Venue</a>
-        <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
-        </div>
-        ';
-    } else {
-        echo '
-        <!-- Side Nav Menu -->
-        <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" id="close-btn">&times;</a>
-            <a href="/authentication.php"> <i class="fa-solid fa-lock"></i> Login/Sign Up</a>
-            <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
-            <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
-            <a href="/venue.php"><i class="fa-solid fa-sign-hanging"></i> Venue</a>
-            <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
-        </div>
-        ';
-    }
-    ?>
+    <!-- Burger icon for smaller screens -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 </nav>

@@ -9,7 +9,7 @@
 <body>
 
 <div class="container">
-    <form action="orderplaced.php" method="post">
+    <form action="orderconfirmation.php" method="post">
         <div class="row">
             <div class="col">
                 <h3 class="title">Payment</h3>
@@ -79,12 +79,12 @@
             
                 <div class="inputBox">
                     <label for="name">Full Name:</label>
-                    <input type="text" id="name" placeholder="Enter your full name" required>
+                    <input type="text" id="name" placeholder="Enter your full name">
                 </div>
             
                 <div class="inputBox">
                     <label for="email">Email:</label>
-                    <input type="text" id="email" placeholder="Enter email address" required>
+                    <input type="text" id="email" placeholder="Enter email address">
                 </div>
             
                 <div class="inputBox">

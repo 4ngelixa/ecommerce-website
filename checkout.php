@@ -80,11 +80,10 @@ if (!empty($_SESSION['cart'])) {
         <div class="pickup-venue">
             <h2>Select Pickup Venue</h2>
             <select name="pickup-venue" id="pickup-venue">
-                <option value="store">Select a store</option>
-                <option value="store1">North Store</option>
-                <option value="store2">South Store</option>
-                <option value="store3">East Store</option>
-                <option value="store4">West Store</option>
+                <option value="store">Select a venue</option>
+                <option value="store1">Serangoon Chu Kang Stadium</option>
+                <option value="store2">Yio Hougang Sports Hall</option>
+                <option value="store3">Bouna Besar Sports Hall</option>
             </select>
         </div>
         <!-- Rest of your checkout form here -->

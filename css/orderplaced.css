@@ -1,3 +1,4 @@
+/* Keep the existing styles for the content wrapper */
 .placeorder.content-wrapper {
     display: flex;
     flex-direction: column;
@@ -6,6 +7,7 @@
     height: 100vh; /* Set height to full viewport height */
 }
 
+/* Keep the existing styles for h1 and p elements */
 .placeorder.content-wrapper h1 {
     font-size: 24px;
     margin: 0 0 20px; /* Add some bottom margin */
@@ -17,6 +19,33 @@
     text-align: center;
 }
 
+/* Adjustments for the purchase history table */
+.purchase-history {
+    width: 80%; /* Adjust the width of the table */
+    margin-top: 20px; /* Add some top margin */
+}
+
+.purchase-history table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.purchase-history th,
+.purchase-history td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.purchase-history th {
+    background-color: #f2f2f2;
+}
+
+.purchase-history tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* No need to modify the tick-container styles */
 .tick-container {
     width: 100%;
     display: flex;
@@ -34,6 +63,7 @@
     /* You can adjust other styling properties such as background-color if needed */
 }
 
+/* No need to modify the placeorder styles */
 .placeorder {
     text-align: center;
     margin-top: 50px;
