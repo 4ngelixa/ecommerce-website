@@ -1,6 +1,6 @@
 <head>
     <title>Your Cart</title>
-    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/carts.css">
     <?php 
         include "inc/head.inc.php"; 
     ?>

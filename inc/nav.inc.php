@@ -38,6 +38,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i> Sign Out</a>
             <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
             <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+            <a href="/venue.php"><i class="fa-regular fa-address-card"></i> Venue</a>
             <a href="/admin_panel.php"><i class="fa-solid fa-cog"></i> Admin Panel</a>
             <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
 
@@ -52,6 +53,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
         <a href="/logout.php"><i class="fa-solid fa-sign-hanging"> </i> Sign Out</a>
         <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
         <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+        <a href="/venue.php"><i class="fa-regular fa-address-card"></i> Venue</a>
         <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
         </div>
         ';
@@ -64,6 +66,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             <a href="/authentication.php"><i class="fa-solid fa-sign-hanging"> </i> Sign Up</a>
             <a href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
             <a href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
+            <a href="/venue.php"><i class="fa-regular fa-address-card"></i> Venue</a>
             <a href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
         </div>
         ';
