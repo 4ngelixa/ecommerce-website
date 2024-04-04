@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+<title>Bling Bling</title>
     <style>
     .bd-placeholder-img {
         font-size: 1.125rem;
@@ -17,7 +18,6 @@
         }
     }
     </style>
-    <title>aboutus</title>
     <?php 
         include "inc/head.inc.php";
     ?>
@@ -39,7 +39,8 @@
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="#777" />
-                        <img class="rounded-logo" src="images/stock_image_product.jpg" alt="stockimage">
+                        <image xlink:href="images/stock_image_product.jpg" x="0" y="0" height="100%" width="100%"
+                            preserveAspectRatio="none"/>
                     </svg>
 
                     <div class="container">
@@ -54,7 +55,8 @@
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="#777" />
-                        <img class="rounded-logo" src="images/court_1.jpg" alt="court">
+                        <image xlink:href="images/court_1.jpg" x="0" y="0" height="100%" width="100%"
+                            preserveAspectRatio="none"/>
                     </svg>
 
                     <div class="container">
