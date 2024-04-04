@@ -12,7 +12,7 @@
     </script>
     <link rel="stylesheet" href="css/main.css">
     <link rel = "stylesheet" href = "css/login.css">
-    <link rel = "stylesheet" href = "css/navbar.css">
+    <link rel = "stylesheet" href = "css/navbars.css">
     <link href="css/product.css" rel="stylesheet">
     <link href="css/carousel.css" rel="stylesheet">
     <script defer src="js/navbar.js"></script>
