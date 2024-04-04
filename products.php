@@ -44,14 +44,23 @@ if ($success) {
         }
 
         .container {
-            width: 90%;
-            margin: auto;
+            width: 100%;
             overflow: hidden;
+            padding-bottom: 80px;
+            margin: 0;
+        }
+
+        p {
+            font-size: 18px;
+            font-weight: normal;
+            line-height: 1.3;
         }
 
         .product-catalog-title {
+            font-size: 35px;
             text-align: center;
-            margin: 2em 0;
+            padding-top: 40px;
+            padding-bottom: 20px;
             font-weight: bold;
         }
 
@@ -63,15 +72,18 @@ if ($success) {
         }
 
         a.product {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             flex-basis: 20%;
-            width: 20%;
-            margin: 2%;
+            margin: 0;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            padding: 1em;
+            padding: 20px;
             background: #fff;
             text-decoration: none;
             color: inherit;
+            transition: background-color 0.3s;
         }
 
         a.product:hover {
@@ -82,27 +94,40 @@ if ($success) {
         .product img {
             max-width: 100%;
             height: auto;
+            margin-bottom: auto;
         }
 
         .product h2 {
-            font-size: 1.5em;
+            font-size: 20px;
             margin: 0.5em 0;
         }
 
         .product p {
             color: #333;
-            font-size: 1.3em;
-            margin: 0.5em 0;
+            font-size: 18px;
+            margin: 1px 0;
             font-weight: bold;
+        }
+
+        @media (max-width: 1200px) {
+            a.product {
+                flex-basis: 25%;
+            }
         }
 
         @media (max-width: 600px) {
             a.product {
-                flex-basis: 45%;
-                width: 45%;
+                flex-basis: 50%;
+                padding: 10px;
             }
         }
 
+        @media (max-width: 400px) {
+            a.product {
+                flex-basis: 100%;
+                padding: 5px;
+            }
+        }
     </style>
 </head>
 
@@ -112,6 +137,8 @@ if ($success) {
 
     <div class="container">
         <h1 class="product-catalog-title">✧ Bling Bling Badminton Products ✧</h1>
+        <p> At Bling Bling Badminton, we are proud to offer a premier selection of essential badminton equipment for enthusiasts and
+            professionals alike. </p>
         <div class="products">
             <?php if ($success && $result && $result->num_rows > 0): ?>
                 <?php while ($row = $result->fetch_assoc()): ?>
@@ -138,6 +165,7 @@ if ($success) {
         $conn->close();
     }
     ?>
+    <?php include "inc/footer.inc.php"; ?>
 </body>
 
 </html>
