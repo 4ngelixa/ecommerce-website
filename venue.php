@@ -195,6 +195,11 @@ if ($venuesResult) {
 
         }
 
+        .scroll {
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
         /* Smartphones (portrait and landscape) ----------- */
 
         @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
@@ -268,7 +273,7 @@ if ($venuesResult) {
                         <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>"
                             id="venue<?= $venue['venue_id'] ?>" role="tabpanel"
                             aria-labelledby="venue<?= $venue['venue_id'] ?>-tab">
-                            <ul class="list-group list-group-flush">
+                            <ul class="list-group list-group-flush scroll">
                                 <?php
                                 $bookingsQuery = "SELECT booking_id, booking_date, timeslot_id FROM venue_bookings WHERE venue_id = ?";
                                 $stmt = $conn->prepare($bookingsQuery);
