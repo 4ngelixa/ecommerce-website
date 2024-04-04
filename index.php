@@ -39,6 +39,7 @@
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="#777" />
+                        <img class="rounded-logo" src="images/stock_image_product.jpg" alt="stockimage">
                     </svg>
 
                     <div class="container">
@@ -53,6 +54,7 @@
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                         aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="#777" />
+                        <img class="rounded-logo" src="images/court_1.jpg" alt="court">
                     </svg>
 
                     <div class="container">
@@ -87,8 +89,8 @@
                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
                         preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777"
-                            dy=".3em">140x140</text>
+                        <rect width="100%" height="100%" fill="#777" /><image xlink:href="images/circle_about_us.png" x="0" y="0" height="100%"
+                            width="100%" preserveAspectRatio="none" />
                     </svg>
 
                     <h2>About Us</h2>
@@ -100,8 +102,8 @@
                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
                         preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777"
-                            dy=".3em">140x140</text>
+                        <rect width="100%" height="100%" fill="#777" /><image xlink:href="images/join_us.png" x="0" y="0" height="100%"
+                            width="100%" preserveAspectRatio="none" />
                     </svg>
 
                     <h2>Join Us Now</h2>
@@ -113,8 +115,8 @@
                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
                         preserveAspectRatio="xMidYMid slice" focusable="false">
                         <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777"
-                            dy=".3em">140x140</text>
+                        <rect width="100%" height="100%" fill="#777" /><<image xlink:href="images/shop.jpg" x="0" y="0" height="100%"
+                            width="100%" preserveAspectRatio="none" />
                     </svg>
 
                     <h2>Products</h2>
