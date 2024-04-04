@@ -38,7 +38,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                     <a class="nav-link" href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/venue.php"><i class="fa-solid fa-box"></i> Venue</a>
+                    <a class="nav-link" href="/venue.php"><i class="fa-solid fa-sign-hanging"></i> Venue</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin_panel.php"><i class="fa-solid fa-cog"></i> Admin Panel</a>
@@ -64,7 +64,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                     <a class="nav-link" href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/venue.php"><i class="fa-solid fa-box"></i> Venue</a>
+                    <a class="nav-link" href="/venue.php"><i class="fa-solid fa-sign-hanging"></i> Venue</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span><?php echo $num_items_in_cart; ?></span></a>
@@ -75,10 +75,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             echo '
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/authentication.php"><i class="fa-solid fa-lock"></i> Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/authentication.php"><i class="fa-solid fa-sign-hanging"></i> Sign Up</a>
+                    <a class="nav-link" href="/authentication.php"><i class="fa-solid fa-lock"></i>Login/SignUp</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/products.php"><i class="fa-solid fa-box"></i> Products</a>
@@ -87,7 +84,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                     <a class="nav-link" href="/about_us.php"><i class="fa-regular fa-address-card"></i> About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/venue.php"><i class="fa-solid fa-box"></i> Venue</a>
+                    <a class="nav-link" href="/venue.php"><i class="fa-solid fa-sign-hanging"></i> Venue</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span><?php echo $num_items_in_cart; ?></span></a>
