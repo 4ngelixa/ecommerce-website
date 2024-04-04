@@ -138,6 +138,7 @@ if ($success) {
         $conn->close();
     }
     ?>
+    <?php include "inc/footer.inc.php"; ?>
 </body>
 
 </html>

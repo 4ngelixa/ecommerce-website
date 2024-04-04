@@ -23,6 +23,7 @@ if (!$config) {
     }
 }
 
+// Fetch product details
 if ($success) {
     // Safely fetch the product ID from the URL
     $productID = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -41,6 +42,25 @@ if ($success) {
     } else {
         $errorMsg = "Failed to prepare the statement.";
         $success = false;
+    }
+
+    // Fetch product reviews
+    $reviews = [];
+    if ($success && $productID) {
+        $reviewQuery = "SELECT m.fname, m.lname, pr.review, pr.review_date 
+                    FROM product_review pr 
+                    JOIN member m ON pr.member_id = m.member_id 
+                    WHERE pr.product_id = ? 
+                    ORDER BY pr.review_date DESC";
+        if ($stmt = $conn->prepare($reviewQuery)) {
+            $stmt->bind_param("i", $productID);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                $reviews[] = $row;
+            }
+            $stmt->close();
+        }
     }
 
     // Close the database connection
@@ -100,6 +120,7 @@ if ($success) {
             text-align: center;
             padding: 30px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            margin-right: 160px;
         }
 
         .product-image img {
@@ -107,15 +128,14 @@ if ($success) {
             max-height: 300px;
         }
 
-        .product-details {
+        .product-name {
             flex: 2;
             margin-left: 20px;
-            font-size: 2em;
-            font-weight: 700;
+            font-size: 40px;
         }
 
         .product-price {
-            font-size: 24px;
+            font-size: 30px;
             font-weight: bold;
             color: #e44d26;
             margin-bottom: 10px;
@@ -123,49 +143,68 @@ if ($success) {
 
         .product-description {
             margin-bottom: 10px;
-            font-size: 1em;
-            line-height: 1.6;
+            font-weight: normal;
+            font-size: 20px;
+            line-height: 1.2;
             margin-bottom: 10px;
+            text-align: justify;
+            text-justify: inter-word;
         }
 
         .product-sku,
         .product-stock {
             margin-bottom: 5px;
             color: darkgrey;
+            line-height: 1.2;
+            font-size: 20px;
         }
 
-        button {
-            border: 1px;
+        /* 'Quantity' label */
+        form#add-to-cart-form label {
+            font-size: 20px;
+        }
+
+        /* 'Quantity' input field */
+        form#add-to-cart-form input[type="number"] {
+            font-size: 20px;
+        }
+
+        /* Add to Cart' button */
+        form#add-to-cart-form button[type="submit"] {
+            background-color: #413ea1;
             color: white;
-            padding: 10px 20px;
+            border: 1px solid grey;
+            padding: 12px 18px;
+            font-size: 20px;
             text-transform: uppercase;
             cursor: pointer;
             margin-top: 10px;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .back-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: #007bff;
+        form#add-to-cart-form button[type="submit"]:hover {
+            background-color: grey;
             color: white;
-            padding: 10px;
-            border: none;
-            cursor: pointer;
+            border: 1px solid #413ea1;
         }
 
-        .back-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: black;
-            padding: 10px;
-            border: none;
-            cursor: pointer;
+        .reviews-section {
+            margin-top: 20px;
+        }
+
+        .reviewer-name {
+            font-weight: bold;
+        }
+
+        .review-date {
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+
+        .review-text {
+            margin-top: 5px;
+            line-height: 1.4;
+            font-weight: normal;
         }
     </style>
 </head>
@@ -175,7 +214,8 @@ if ($success) {
     <?php include "inc/nav.inc.php"; ?>
 
     <div style="padding-left: 30px; margin-top: 40px;">
-        <a href="products.php" style="text-decoration: none; color: #413ea1; font-weight: bold;">&larr; Back to Products</a>
+        <a href="products.php" style="text-decoration: none; color: #413ea1; font-weight: bold;">&larr; Back to
+            Products</a>
     </div>
 
     <?php if ($success && $product): ?>
@@ -184,7 +224,7 @@ if ($success) {
                 <img src="images/<?= strtolower($product["pname"]); ?>.png"
                     alt="<?= htmlspecialchars($product["pname"]); ?>" />
             </div>
-            <div class="product-details">
+            <div class="product-name">
                 <h1>
                     <?= htmlspecialchars($product["pname"]); ?>
                 </h1>
@@ -215,6 +255,36 @@ if ($success) {
             <?= $errorMsg ?: "Product not found." ?>
         </p>
     <?php endif; ?>
+
+    <hr>
+
+    <!-- User Reviews !-->
+    <?php if ($success && $product): ?>
+        <!-- If there are product details to show -->
+        <?php if (!empty($reviews)): ?>
+            <div class="reviews-section">
+                <h2>User Reviews</h2>
+                <?php foreach ($reviews as $review): ?>
+                    <div class="review">
+                        <span class="reviewer-name">
+                            <?= htmlspecialchars($review['fname'] . ' ' . $review['lname']); ?>
+                        </span>
+                        <span class="review-date" style="color: grey;">
+                            <?= date("F j, Y, g:i a", strtotime($review['review_date'])); ?>
+                        </span>
+                        <p class="review-text">
+                            <?= nl2br(htmlspecialchars($review['review'])); ?>
+                        </p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <center>
+                <p>No reviews yet.</p>
+            </center>
+        <?php endif; ?>
+    <?php endif; ?>
+
 
     <script>
         // Function to calculate total quantity in the cart
