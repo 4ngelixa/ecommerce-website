@@ -91,14 +91,12 @@ if ($venuesResult) {
     </div>
     <main class="container">
         <div class="intro-field">
-            <section class="intro-text">
+            <div class="intro-text">
                 <p>At Bling Bling Badminton, we offer free usage of our facilities and badminton halls.</p>
                 <p>Badminton is meant to be enjoyed!</p>
-            </section>
-            <section class="intro-text2">
                 <p>Our courts are open from 10 AM to 6 PM daily. Please book a badminton hall in advance!</p>
                 <p>Edit your bookings or book a venue from here!</p>
-            </section>
+            </div>
         </div>
         <div class="card mb-3">
             <div class="card-header">
@@ -184,7 +182,7 @@ if ($venuesResult) {
         </div>
 
         <div class="card mb-3">
-            <div class="card-img-top" alt="Venue Image"></div>
+            <div class="card-img-top"></div>
             <div class="card-header">
                 Venues
             </div>
