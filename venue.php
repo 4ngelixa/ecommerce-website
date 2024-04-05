@@ -48,195 +48,16 @@ if ($venuesResult) {
 
 <head>
     <title>Bling Bling Venues</title>
-    <?php
-    include "inc/head.inc.php";
-    ?>
+    <?php include "inc/head.inc.php"; ?>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
-        </script>
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
     <script src="js/venue.js"></script>
-    <style>
-        .card-header .btn-link {
-            color: inherit;
-            /* Or set to your original header text color */
-            text-decoration: none;
-            font-weight: bold;
-            /* Optional: if your original headers are bold */
-        }
-
-        .card-header .btn-link:hover,
-        .card-header .btn-link:focus {
-            text-decoration: none;
-            color: inherit;
-            /* Or a color of your choice for hover state */
-            background-color: transparent;
-        }
-
-        /* Base table styles */
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table th,
-        .table td {
-            text-align: center;
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        /* Styles for booked and available slots */
-        .booked,
-        .available {
-            padding: 10px;
-            cursor: pointer;
-            margin: 5px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .booked {
-            background-color: #ffcccc;
-            /* Light red for booked slots */
-        }
-
-        .available {
-            background-color: #ccffcc;
-            /* Light green for available slots */
-        }
-
-        /* Hover effect to indicate interactivity */
-        .booked:hover,
-        .available:hover {
-            background-color: #dddddd;
-        }
-
-        /* Adjusts the header */
-        .table th {
-            background-color: #f2f2f2;
-        }
-
-        @media only screen and (max-width: 760px),
-        (min-device-width: 802px) and (max-device-width: 1020px) {
-
-            /* Force table to not be like tables anymore */
-            table,
-            thead,
-            tbody,
-            th,
-            td,
-            tr {
-                display: block;
-
-            }
-
-
-
-            .empty {
-                display: none;
-            }
-
-            /* Hide table headers (but not display: none;, for accessibility) */
-            th {
-                position: absolute;
-                top: -9999px;
-                left: -9999px;
-            }
-
-            tr {
-                border: 1px solid #ccc;
-            }
-
-            td {
-                /* Behave  like a "row" */
-                border: none;
-                border-bottom: 1px solid #eee;
-                position: relative;
-                padding-left: 50%;
-            }
-
-
-
-            /*
-        Label the data
-        */
-            td:nth-of-type(1):before {
-                content: "Sunday";
-            }
-
-            td:nth-of-type(2):before {
-                content: "Monday";
-            }
-
-            td:nth-of-type(3):before {
-                content: "Tuesday";
-            }
-
-            td:nth-of-type(4):before {
-                content: "Wednesday";
-            }
-
-            td:nth-of-type(5):before {
-                content: "Thursday";
-            }
-
-            td:nth-of-type(6):before {
-                content: "Friday";
-            }
-
-            td:nth-of-type(7):before {
-                content: "Saturday";
-            }
-
-
-        }
-
-        .scroll {
-            max-height: 100px;
-            overflow-y: auto;
-        }
-
-        /* Smartphones (portrait and landscape) ----------- */
-
-        @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-            body {
-                padding: 0;
-                margin: 0;
-            }
-        }
-
-        /* iPads (portrait and landscape) ----------- */
-
-        @media only screen and (min-device-width: 802px) and (max-device-width: 1020px) {
-            body {
-                width: 495px;
-            }
-        }
-
-        @media (min-width:641px) {
-            table {
-                table-layout: fixed;
-            }
-
-            td {
-                width: 33%;
-            }
-        }
-
-        .row {
-            margin-top: 20px;
-        }
-
-        .today {
-            background-color: #FFFF00;
-            /* Yellow background for today */
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="css/venue.css">
 </head>
 
 <body>
@@ -269,7 +90,20 @@ if ($venuesResult) {
                     </ul>
 
                     <div class="tab-content" id="bookingTabsContent">
-                        <?php foreach ($venues as $index => $venue): ?>
+                        <?php
+                        // Example timeslot mapping
+                        $timeslotMapping = [
+                            1 => "10AM to 11AM",
+                            2 => "11AM to 12PM",
+                            3 => "12PM to 1PM",
+                            4 => "1PM to 2PM",
+                            5 => "2PM to 3PM",
+                            6 => "3PM to 4PM",
+                            7 => "4PM to 5PM",
+                            8 => "5PM to 6PM"
+                        ];
+
+                        foreach ($venues as $index => $venue): ?>
                             <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>"
                                 id="venue<?= $venue['venue_id'] ?>" role="tabpanel"
                                 aria-labelledby="venue<?= $venue['venue_id'] ?>-tab">
@@ -277,13 +111,19 @@ if ($venuesResult) {
                                     <?php
                                     $bookingsQuery = "SELECT booking_id, booking_date, timeslot_id FROM venue_bookings WHERE venue_id = ? AND member_id = ? ORDER BY booking_date ASC, timeslot_id ASC";
                                     $stmt = $conn->prepare($bookingsQuery);
-                                    // Notice the addition of $memberId in bind_param() to include it in the query
                                     $stmt->bind_param("ii", $venue['venue_id'], $memberId);
                                     $stmt->execute();
                                     $bookingsResult = $stmt->get_result();
                                     if ($bookingsResult->num_rows > 0) {
                                         while ($booking = $bookingsResult->fetch_assoc()) {
-                                            echo "<li class='list-group-item'>Booking ID: " . htmlspecialchars($booking['booking_id']) . " - Date: " . htmlspecialchars($booking['booking_date']) . " Time: </li>";
+                                            // Format the booking date
+                                            $bookingDate = new DateTime($booking['booking_date']);
+                                            $formattedDate = $bookingDate->format('F j');
+                                            // Get the timeslot text
+                                            $timeslotText = $timeslotMapping[$booking['timeslot_id']] ?? "Unknown Time";
+                                            // Construct the display text
+                                            $displayText = "{$formattedDate} {$timeslotText} | Booking ID {$booking['booking_id']}";
+                                            echo "<li class='list-group-item'>" . htmlspecialchars($displayText) . "</li>";
                                         }
                                     } else {
                                         echo "<li class='list-group-item'>No bookings available</li>";
@@ -337,28 +177,6 @@ if ($venuesResult) {
                     <?php endforeach; ?>
                 </div>
             </div>
-        </div>
-
-
-        <div class="row">
-            <?php foreach ($venues as $venue): ?>
-                <div class="col-12 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <?= htmlspecialchars($venue['venue_name']) ?>
-                        </div>
-                        <div class="card-body">
-                            <?php
-                            // Determine the month and year to display
-                            $month = isset($_SESSION['current_month']) ? $_SESSION['current_month'] : date('m');
-                            $year = isset($_SESSION['current_year']) ? $_SESSION['current_year'] : date('Y');
-                            // Display the calendar for this venue
-                            echo build_calendar($month, $year, $venue['venue_id'], $conn);
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
         </div>
 
         <!-- Timeslot Modal -->
