@@ -5,6 +5,22 @@ $success = true;
 
 session_start(); // Ensure session start is at the top
 
+// Check if the month/year is being changed through navigation
+if (isset($_GET['month']) && isset($_GET['year'])) {
+    $_SESSION['calendar_month'] = $_GET['month'];
+    $_SESSION['calendar_year'] = $_GET['year'];
+} else {
+    // Initialize to current month/year if not already set
+    if (!isset($_SESSION['calendar_month'])) {
+        $_SESSION['calendar_month'] = date('m');
+    }
+    if (!isset($_SESSION['calendar_year'])) {
+        $_SESSION['calendar_year'] = date('Y');
+    }
+}
+
+$month = $_SESSION['calendar_month'];
+$year = $_SESSION['calendar_year'];
 
 // Retrieve member_id from the session
 $memberId = $_SESSION['id'];
@@ -268,9 +284,14 @@ if ($venuesResult) {
 <?php
 function build_calendar($month, $year, $venue_id, $conn)
 {
+    // Retrieve the month and year from the session, or use the current month and year as defaults
+    $month = isset($_SESSION['calendar_month']) ? $_SESSION['calendar_month'] : date('m');
+    $year = isset($_SESSION['calendar_year']) ? $_SESSION['calendar_year'] : date('Y');
+
+    $venue_id = $_SESSION['venue_id']; // Assume you have venue_id stored in session or passed somehow
+
     $totalTimeslots = 8; // Assuming there are 8 timeslots available per day.
     $today = date('Y-m-d');
-
     $startDate = "$year-$month-01";
     $endDate = date("Y-m-t", strtotime($startDate));
     $bookingsQuery = "SELECT booking_date, COUNT(*) as booking_count 
@@ -294,16 +315,28 @@ function build_calendar($month, $year, $venue_id, $conn)
     $dateComponents = getdate($firstDayOfMonth);
     $monthName = $dateComponents['month'];
     $dayOfWeek = $dateComponents['wday'];
-    $datetoday = date('Y-m-d');
+
 
     // Starting the HTML table for the calendar
-    $calendar = "<table class='table table-bordered'>";
+    // $calendar = "<table class='table table-bordered'>";
     // Adding navigation for previous, current, and next months
-    $calendar .= "<center><h2>$monthName $year</h2>";
-    $calendar .= "<a class='btn btn-xs btn-success' href='?month=" . date('m', mktime(0, 0, 0, $month - 1, 1, $year)) . "&year=" . date('Y', mktime(0, 0, 0, $month - 1, 1, $year)) . "'>Previous Month</a> ";
-    $calendar .= " <a class='btn btn-xs btn-danger' href='?month=" . date('m') . "&year=" . date('Y') . "'>Current Month</a> ";
-    $calendar .= "<a class='btn btn-xs btn-primary' href='?month=" . date('m', mktime(0, 0, 0, $month + 1, 1, $year)) . "&year=" . date('Y', mktime(0, 0, 0, $month + 1, 1, $year)) . "'>Next Month</a></center><br>";
 
+    $prev_month = date('m', mktime(0, 0, 0, $month - 1, 1, $year));
+    $prev_year = date('Y', mktime(0, 0, 0, $month - 1, 1, $year));
+    $next_month = date('m', mktime(0, 0, 0, $month + 1, 1, $year));
+    $next_year = date('Y', mktime(0, 0, 0, $month + 1, 1, $year));
+
+
+    $calendar = "<div class='calendar-navigation' style='display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px 0;'>";
+    $calendar .= "<a class='btn btn-xs btn-success' href='?month={$prev_month}&year={$prev_year}'><i class='fa fa-arrow-left'></i></a>";
+
+    // Month and year in the center, bigger and bold
+    $calendar .= "<span class='current-month-year' style='font-size: 20px; font-weight: bold;'>{$monthName} {$year}</span>";
+
+    $calendar .= "<a class='btn btn-xs btn-primary' href='?month={$next_month}&year={$next_year}'><i class='fa fa-arrow-right'></i></a>";
+    $calendar .= "</div>";
+
+    $calendar .= "<table class='table table-bordered'>";
     // Days header
     $calendar .= "<tr>";
     foreach ($daysOfWeek as $day) {
