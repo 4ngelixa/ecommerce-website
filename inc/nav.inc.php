@@ -22,7 +22,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Nav links -->
         <?php 
-        if ($_SESSION['admin'] == "admin") {
+        if (isset($_SESSION['admin']) && $_SESSION['admin'] == "admin") {
             echo '
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
@@ -44,7 +44,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                     <a class="nav-link" href="/admin_panel.php"><i class="fa-solid fa-cog"></i> Admin Panel</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span><?php echo $num_items_in_cart; ?></span></a>
+                    <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
                 </li>
             </ul>
             ';
@@ -67,7 +67,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                     <a class="nav-link" href="/venue.php"><i class="fa-solid fa-sign-hanging"></i> Venue</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span><?php echo $num_items_in_cart; ?></span></a>
+                    <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
                 </li>
             </ul>
             ';
@@ -87,7 +87,7 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                     <a class="nav-link" href="/venue.php"><i class="fa-solid fa-sign-hanging"></i> Venue</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span><?php echo $num_items_in_cart; ?></span></a>
+                    <a class="nav-link" href="/shopping_cart.php"><i class="fas fa-shopping-cart"></i> Cart <span>'.$num_items_in_cart.'</span></a>
                 </li>
             </ul>
             ';

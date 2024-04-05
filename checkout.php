@@ -65,70 +65,70 @@ if (!empty($_SESSION['cart'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
-    <link rel="stylesheet" href="css/checkout.css">
+    <link rel="stylesheet" href="/css/checkout.css">
     <!-- Include any necessary PHP files -->
     <?php include "inc/head.inc.php"; ?>
 </head>
 <body>
     <!-- Include navigation -->
     <?php include "inc/nav.inc.php"; ?>
-    
-    <div class="checkout-container">
-    <h1>Checkout</h1>
 
-        <!-- Select Pickup Venue dropdown menu -->
-        <div class="pickup-venue">
-            <h2>Select Pickup Venue</h2>
-            <select name="pickup-venue" id="pickup-venue">
-                <option value="store">Select a venue</option>
-                <option value="store1">Serangoon Chu Kang Stadium</option>
-                <option value="store2">Yio Hougang Sports Hall</option>
-                <option value="store3">Bouna Besar Sports Hall</option>
-            </select>
-        </div>
-        <!-- Rest of your checkout form here -->
-    </div>
+    <main>
+        <div class="checkout-container">
+            <h1>Checkout</h1>
 
-        <!-- Display ordered products and total price -->
-        <div class="ordered-products">
-            <h2>Ordered Products</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($productsInCart as $product): ?>
+            <!-- Pickup Venue Selection -->
+            <section class="pickup-venue" aria-labelledby="pickup-venue-heading">
+                <h2 id="pickup-venue-heading">Select Pickup Venue</h2>
+                <select name="pickup-venue" id="pickup-venue" aria-label="pickup venue">
+                    <option value="store">Select a venue</option>
+                    <option value="store1">Serangoon Chu Kang Stadium</option>
+                    <option value="store2">Yio Hougang Sports Hall</option>
+                    <option value="store3">Bouna Besar Sports Hall</option>
+                </select>
+            </section>
+
+            <!-- Ordered Products -->
+            <section class="ordered-products" aria-labelledby="ordered-products-heading">
+                <h2 id="ordered-products-heading">Ordered Products</h2>
+                <table aria-describedby="ordered-products-heading">
+                    <thead>
                         <tr>
-                            <td><?= htmlspecialchars($product["pname"]); ?></td>
-                            <td>$<?= number_format((float)$product["price"], 2, '.', ''); ?></td>
-                            <td><?= $product["quantity"]; ?></td>
-                            <td>$<?= number_format((float)$product["total"], 2, '.', ''); ?></td>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <div class="total-price">
-                <h3>Total Price: $<?= number_format($subtotal, 2, '.', ''); ?></h3>
-            </div>
-        </div>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($productsInCart as $product): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($product["pname"]); ?></td>
+                                <td>$<?= number_format((float)$product["price"], 2, '.', ''); ?></td>
+                                <td><?= $product["quantity"]; ?></td>
+                                <td>$<?= number_format((float)$product["total"], 2, '.', ''); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div class="total-price" aria-live="polite">
+                    <h3>Total Price: $<?= number_format($subtotal, 2, '.', ''); ?></h3>
+                </div>
+            </section>
 
-        <!-- Form to collect user's email for confirmation -->
-        <div class="email-form">
-            <h2>Enter Your Email</h2>
-            <form action="place_order.php" method="post">
-                <input type="email" name="email" id="email" placeholder="Your Email" required>
-                <button type="submit" name="next" formaction="card.php">Next</button>
-            </form>
-        </div>
+            <!-- Email Form -->
+            <section class="email-form" aria-labelledby="email-form-heading">
+                <h2 id="email-form-heading">Enter Your Email</h2>
+                <form action="place_order.php" method="post">
+                    <input type="email" name="email" id="email" placeholder="Your Email" required>
+                    <button type="submit" name="next" formaction="card.php">Next</button>
+                </form>
+            </section>
 
-        <!-- Buttons for back and next -->
-        <div class="buttons">
-            <button onclick="window.location.href='shopping_cart.php'" class="back-button">Back</button>
+            <!-- Buttons -->
+            <section class="buttons" aria-labelledby="buttons-heading">
+                <button onclick="window.location.href='shopping_cart.php'" class="back-button">Back</button>
+            </section>
         </div>
     </main>
 
