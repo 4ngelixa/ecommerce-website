@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-<link rel="stylesheet" href="css/logins.css">
+    <title>Bling Bling</title>
+    <link rel="stylesheet" href="css/logins.css">
     <?php
     include "inc/head.inc.php";
 
@@ -47,11 +48,13 @@
                             </div>
                             <div class="hr"></div>
                             <div class="foot-lnk">
-                                <a href="authentication.php">Login</a>
+                                <a href="authentication.php" style="color : #F2F2F2;">Login</a>
                             </div>
                         </div>
+                    </form>
                 </div>
             </div>
+        </div>
 
     </main>
 

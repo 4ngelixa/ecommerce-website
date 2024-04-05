@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="css/navbars.css">
 <link href="css/product.css" rel="stylesheet">
 <link href="css/carousel.css" rel="stylesheet">
-<script defer src="js/navbar.js"></script>
+<script defer src="js/navbars.js"></script>
 <script defer src="js/mains.js"></script>
 
 <script defer src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
