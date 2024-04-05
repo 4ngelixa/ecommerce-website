@@ -17,7 +17,7 @@
     align-items: center;
     min-height: 90vh;
     padding: 25px;
-    background: #73B5BD;
+    background: cornflowerblue;
 }
 
 .container form {
@@ -39,7 +39,7 @@
 
 .col .title{
     font-size: 20px;
-    color: #5e8f94;
+    color: rgb(33, 77, 159);
     padding-bottom: 5px;
 }
 
@@ -83,7 +83,7 @@
     width: 100%;
     padding: 12px;
     font-size: 17px;
-    background: #5e8f94;
+    background: rgb(33, 77, 159);
     color: #fff;
     margin-top: 5px;
     cursor: pointer;
@@ -101,7 +101,7 @@ input::-webkit-outer-spin-button{
 
 /* Style for the back button */
 .backButton {
-    background-color: #5e8f94; /* Background color */
+    background-color: rgb(33, 77, 159); /* Background color */
     color: #fff; /* Text color */
     padding: 8px 15px; /* Padding */
     border: none; /* Remove border */
@@ -118,7 +118,7 @@ input::-webkit-outer-spin-button{
 }
 
 .title {
-    color: #5e8f94; /* Text color for the title */
+    color: rgb(33, 77, 159); /* Text color for the title */
     margin-bottom: 0; /* Remove default margin */
 }
 

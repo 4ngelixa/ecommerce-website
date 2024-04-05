@@ -1,17 +1,24 @@
-*{
+/* Global reset */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+/* Flex centering for body */
+body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
 
-.container{
+.title h1 {
+    font-size: 20px; /* Adjust the size as needed */
+}
+
+/* Container styling */
+.container {
     width: 400px;
     border-radius: 8px;
     padding: 40px;
@@ -20,32 +27,32 @@ body{
                 0 18px 36px -6px rgba(0, 0, 0, 0.1);
 }
 
-.container .title{
+/* Title styling */
+.container .title {
     font-size: 20px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.container form input{
+/* Hide radio buttons */
+.container form input[type="radio"] {
     display: none;
 }
 
-.container form .category{
+/* Payment categories grid */
+.container form .category {
     margin-top: 10px;
     padding-top: 20px;
-
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 15px;
 }
 
-.category label{
-    /* width: 100%; */
-    /* height: 65px; */
+/* Individual payment method styling */
+.category label {
     height: 145px;
     padding: 20px;
     box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
     display: flex;
-    /* justify-content: space-between; */
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -53,119 +60,93 @@ body{
     position: relative;
 }
 
-#creditcard:checked ~ .category .creditMethod,
-#grabpay:checked ~ .category .grabpayMethod,
-#paypal:checked ~ .category .paypalMethod,
-#googlepay:checked ~ .category .googlepayMethod{
-    box-shadow: 0px 0px 0px 1px #6064b6;
+/* Content inside label */
+.category label .name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
 }
 
-
-#creditcard:checked ~ .category .creditMethod,
-#grabpay:checked ~ .category .grabpayMethod,
-#paypal:checked ~ .category .paypalMethod,
-#googlepay:checked ~ .category .googlepayMethod{
+/* Styling for selected payment method */
+.container form input[type="radio"]:checked + label {
+    box-shadow: 0px 0px 0px 1px #6064b6;
     display: block;
 }
 
-label .imgName{
+/* Content inside label */
+.label-content {
     display: flex;
-    /* justify-content: space-between;
-     */
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
 }
 
-.imgName span{
-    /* margin-left: 20px; */
-    font-family: Arial, Helvetica, sans-serif;
-
-    position: absolute;
-    top: 72%;
-    transform: translateY(-72%);
-}
-
-.imgName .imgContainer{
+/* Image container */
+.imgContainer {
     width: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    position: absolute;
-    top: 35%;
-    transform: translateY(-35%);
+    margin-bottom: 10px; /* Adjust spacing between image and text */
 }
 
-img{
+/* Image styling */
+img {
     width: 50px;
     height: auto;
 }
 
-.credit img{
+/* Specific image styling */
+.credit img {
     width: 70px;
-    /* margin-left: 5px; */
 }
 
-.grabpay img{
+.grabpay img {
     width: 65px;
 }
 
-.paypal img{
+.paypal img {
     width: 80px;
 }
 
-.googlepay img{
+.googlepay img {
     width: 50px;
 }
 
-.check{
+/* Check mark styling */
+.check {
     display: none;
     position: absolute;
     top: -4px;
     right: -4px;
 }
 
-.check i{
+.check i {
     font-size: 18px;
 }
 
-.nextButton {
-    margin-top: 20px; /* Adjust the top margin as needed */
-    background-color: cornflowerblue;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.nextButton:hover {
-    background-color: #6495ED; /* Change color on hover if needed */
-}
-
-.backButton {
-    margin-top: 20px; /* Adjust the top margin as needed */
-    background-color: cornflowerblue;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.backButton:hover {
-    background-color: #6495ED; /* Change color on hover if needed */
-}
-
-.button-container {
-    display: flex;
-    justify-content: space-between; /* Adjusts spacing between buttons */
-}
-
+/* Next and back buttons */
 .nextButton,
 .backButton {
-    width: 25%; /* Set the width of buttons */
+    margin-top: 20px;
+    background-color: rgb(33, 77, 159);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 25%;
+}
+
+/* Button hover effect */
+.nextButton:hover,
+.backButton:hover {
+    background-color: #6495ED;
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    justify-content: space-between;
 }
