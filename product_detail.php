@@ -5,12 +5,8 @@ $errorMsg = ''; // Initialize error message and success flag
 $success = true;
 $reviewPosted = false; // Flag to check if the review was posted
 
-// Prevent caching
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-
-function sanitizeInput($data) {
+function sanitizeInput($data)
+{
     $data = trim($data); // Strip unnecessary characters (extra space, tab, newline)
     $data = stripslashes($data); // Remove backslashes (\)
     $data = htmlspecialchars($data); // Convert special characters to HTML entities
@@ -20,7 +16,7 @@ function sanitizeInput($data) {
 // Function to check if user is logged in
 function isLoggedIn()
 {
-    return isset($_SESSION['id']); // 'id' is set in $_SESSION when a user logs in
+    return isset($_SESSION['id']);
 }
 
 // Include dependencies
@@ -50,13 +46,11 @@ if (!$config) {
 // Handle review submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['review'])) {
     if (!isLoggedIn()) {
-        // If the user is not logged in, redirect to the login page
-        header('Location: authentication.php');
-        exit();
+        // User is not logged in, handle in JavaScript
     } else {
-        $memberID = $_SESSION['id']; // Assuming 'id' is the session variable for the logged-in user
-        $review = sanitizeInput($_POST['review']); // Sanitize the review
-        $productID = $_POST['product_id']; // Assuming this comes from a hidden input in the form
+        $memberID = $_SESSION['id'];
+        $review = sanitizeInput($_POST['review']);
+        $productID = $_POST['product_id'];
 
         if (empty($review)) {
             $errorMsg = "Review cannot be empty.";
@@ -66,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['review'])) {
             if ($stmt = $conn->prepare($insertReviewSQL)) {
                 $stmt->bind_param("iis", $productID, $memberID, $review);
                 if ($stmt->execute()) {
-                    $reviewPosted = true; // Indicate that the review was posted
+                    $reviewPosted = true;
                 } else {
                     $errorMsg = "Error submitting the review: " . $stmt->error;
                     $success = false;
@@ -79,7 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['review'])) {
         }
     }
 }
-
 
 // Fetch product details
 if ($success) {
@@ -129,7 +122,6 @@ if ($success) {
     // Close the database connection
     $conn->close();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -229,6 +221,13 @@ if ($success) {
 
     <script>
         var isLoggedIn = <?php echo json_encode(isLoggedIn()); ?>;
+        var shouldRedirect = <?php echo json_encode(!isLoggedIn() && $_SERVER['REQUEST_METHOD'] == 'POST'); ?>;
+
+        // redirect user to login before submitting product review
+        if (shouldRedirect) {
+            alert('Please log in to submit your review.');
+            window.location.href = 'authentication.php';
+        }
 
         // function to zoom product image
         function zoomImage(imageContainer) {
