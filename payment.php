@@ -96,38 +96,38 @@
                     <!-- Full Name Input -->
                     <div class="inputBox">
                         <label for="fullName">Full Name:</label>
-                        <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                        <input type="text" id="fullName" name="fullName" placeholder="Enter your full name">
                     </div>
 
                     <!-- Email Input -->
                     <div class="inputBox">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" placeholder="Enter email address" required>
+                        <input type="email" id="email" name="email" placeholder="Enter email address">
                     </div>
 
                     <!-- Address Input -->
                     <div class="inputBox">
                         <label for="address">Address:</label>
-                        <input type="text" id="address" name="address" placeholder="Enter address" required>
+                        <input type="text" id="address" name="address" placeholder="Enter address">
                     </div>
 
                     <!-- City Input -->
                     <div class="inputBox">
                         <label for="city">City:</label>
-                        <input type="text" id="city" name="city" placeholder="Enter city" required>
+                        <input type="text" id="city" name="city" placeholder="Enter city">
                     </div>
 
                     <div class="flex">
                         <!-- State Input -->
                         <div class="inputBox">
                             <label for="state">State:</label>
-                            <input type="text" id="state" name="state" placeholder="Enter state" required>
+                            <input type="text" id="state" name="state" placeholder="Enter state">
                         </div>
 
                         <!-- Zip Code Input -->
                         <div class="inputBox">
                             <label for="zip">Zip Code:</label>
-                            <input type="text" id="zip" name="zip" placeholder="123 456" required>
+                            <input type="text" id="zip" name="zip" placeholder="123 456">
                         </div>
                     </div>
                 </div>
