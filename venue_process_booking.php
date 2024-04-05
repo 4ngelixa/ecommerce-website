@@ -38,7 +38,7 @@ foreach ($timeslots as $timeslotId) {
     $checkStmt->bind_param("iis", $venueId, $timeslotId, $bookingDate); // Correct order and types
     $checkStmt->execute();
     $checkResult = $checkStmt->get_result()->fetch_assoc();
-    
+
     if ($checkResult['count'] > 0) {
         // Timeslot is already booked
         $errors[] = "Timeslot $timeslotId on $bookingDate is already booked.";
@@ -48,7 +48,7 @@ foreach ($timeslots as $timeslotId) {
     // Proceed to insert booking if the timeslot is available
     $stmt = $conn->prepare("INSERT INTO venue_bookings (venue_id, booking_date, timeslot_id, member_id) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("isis", $venueId, $bookingDate, $timeslotId, $memberId); // Ensure correct data types
-    
+
     if (!$stmt->execute()) {
         $errors[] = "Booking failed for timeslot $timeslotId on $bookingDate: " . $stmt->error;
     }
@@ -56,6 +56,14 @@ foreach ($timeslots as $timeslotId) {
 
 if (!empty($errors)) {
     echo json_encode(['error' => $errors]);
+    $_SESSION['toast'] = [
+        'type' => 'error',
+        'message' => 'Error encountered when booking.'
+    ];
 } else {
     echo json_encode(['success' => 'Booking successful']);
+    $_SESSION['toast'] = [
+        'type' => 'success',
+        'message' => 'Your booking has been successfully placed.'
+    ];
 }

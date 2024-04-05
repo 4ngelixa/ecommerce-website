@@ -113,9 +113,17 @@ if ($venuesResult) {
                                 aria-labelledby="venue<?= $venue['venue_id'] ?>-tab">
                                 <ul class="list-group list-group-flush scroll">
                                     <?php
-                                    $bookingsQuery = "SELECT booking_id, booking_date, timeslot_id FROM venue_bookings WHERE venue_id = ? AND member_id = ? ORDER BY booking_date ASC, timeslot_id ASC";
+                                    $todayDate = date('Y-m-d');
+
+                                    // Adjust your bookings query
+                                    $bookingsQuery = "SELECT booking_id, booking_date, timeslot_id FROM venue_bookings 
+                                    WHERE venue_id = ? AND member_id = ? AND booking_date >= ? 
+                                    ORDER BY booking_date ASC, timeslot_id ASC";
+                                    // Prepare the statement
                                     $stmt = $conn->prepare($bookingsQuery);
-                                    $stmt->bind_param("ii", $venue['venue_id'], $memberId);
+
+                                    // Bind parameters, including today's date to filter out past bookings
+                                    $stmt->bind_param("iis", $venue['venue_id'], $memberId, $todayDate);
                                     $stmt->execute();
                                     $bookingsResult = $stmt->get_result();
                                     if ($bookingsResult->num_rows > 0) {
@@ -261,6 +269,7 @@ if ($venuesResult) {
 function build_calendar($month, $year, $venue_id, $conn)
 {
     $totalTimeslots = 8; // Assuming there are 8 timeslots available per day.
+    $today = date('Y-m-d');
 
     $startDate = "$year-$month-01";
     $endDate = date("Y-m-t", strtotime($startDate));
@@ -317,14 +326,21 @@ function build_calendar($month, $year, $venue_id, $conn)
         }
 
         $date = "$year-$month-" . str_pad($currentDay, 2, '0', STR_PAD_LEFT);
-        $todayClass = ($date == $datetoday) ? "today" : "";
+        $todayClass = ($date == $today) ? "today" : "";
+        $isPast = ($date < $today) ? true : false; // Check if the date is before today
 
         $calendar .= "<td class='$todayClass'><h4>$currentDay</h4>";
 
-        if (isset($bookingsByDate[$date]) && $bookingsByDate[$date] >= $totalTimeslots) {
-            $calendar .= "<span class='btn btn-danger btn-xs'>Booked</span>";
+        if ($isPast) {
+            // For dates in the past, you can either not display a button, or display a disabled button
+            $calendar .= "<button class='btn btn-secondary btn-xs' disabled>Past Date</button>";
         } else {
-            $calendar .= "<button class='btn btn-success btn-xs' data-toggle='modal' data-target='#timeslotModal' data-date='$date' data-venue='$venue_id'>Book Now</button>";
+            // For future dates (including today), check if they are fully booked or not
+            if (isset($bookingsByDate[$date]) && $bookingsByDate[$date] >= $totalTimeslots) {
+                $calendar .= "<span class='btn btn-danger btn-xs'>Booked Out</span>";
+            } else {
+                $calendar .= "<button class='btn btn-success btn-xs' data-toggle='modal' data-target='#timeslotModal' data-date='$date' data-venue='$venue_id'>Book Now</button>";
+            }
         }
 
         $calendar .= "</td>";
