@@ -86,9 +86,11 @@ if ($venuesResult) {
     </div>
 
     <!-- Background image container with overlay text -->
-    <div class="header-image">
-        <div class="overlay-text">✧ Bling Bling Badminton Halls ✧</div>
-    </div>
+    <header>
+        <div class="header-image">
+            <h1 class="overlay-text">✧ Bling Bling Badminton Halls ✧</h1>
+        </div>
+    </header>
     <main class="container">
         <div class="intro-field">
             <div class="intro-text">
@@ -359,7 +361,7 @@ function build_calendar($month, $year, $venue_id, $conn)
         $todayClass = ($date == $today) ? "today" : "";
         $isPast = ($date < $today) ? true : false; // Check if the date is before today
 
-        $calendar .= "<td class='$todayClass'><h4>$currentDay</h4>";
+        $calendar .= "<td class='$todayClass'><h2>$currentDay</h2>";
 
         if ($isPast) {
             // For dates in the past, you can either not display a button, or display a disabled button
