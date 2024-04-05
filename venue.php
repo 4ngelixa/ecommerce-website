@@ -116,15 +116,18 @@ if ($venuesResult) {
                                     $bookingsResult = $stmt->get_result();
                                     if ($bookingsResult->num_rows > 0) {
                                         while ($booking = $bookingsResult->fetch_assoc()) {
-                                            // Format the booking date
                                             $bookingDate = new DateTime($booking['booking_date']);
                                             $formattedDate = $bookingDate->format('F j');
-                                            // Get the timeslot text
                                             $timeslotText = $timeslotMapping[$booking['timeslot_id']] ?? "Unknown Time";
-                                            // Construct the display text
                                             $displayText = "{$formattedDate} {$timeslotText} | Booking ID {$booking['booking_id']}";
-                                            echo "<li class='list-group-item'>" . htmlspecialchars($displayText) . "</li>";
+
+                                            // Wrap in a div with d-flex and justify-content-between classes for alignment
+                                            echo "<li class='list-group-item d-flex justify-content-between align-items-center'>" .
+                                                htmlspecialchars($displayText) .
+                                                "<button class='btn btn-danger btn-sm delete-booking' data-booking-id='{$booking['booking_id']}'>&times;</button>" .
+                                                "</li>";
                                         }
+
                                     } else {
                                         echo "<li class='list-group-item'>No bookings available</li>";
                                     }
@@ -140,6 +143,18 @@ if ($venuesResult) {
                 <?php endif; ?>
             </div>
         </div>
+
+        <?php if (isset($_GET['success'])): ?>
+            <div class="alert alert-success" role="alert">
+                <?= htmlspecialchars($_GET['success']) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error'])): ?>
+            <div class="alert alert-danger" role="alert">
+                <?= htmlspecialchars($_GET['error']) ?>
+            </div>
+        <?php endif; ?>
 
         <div class="card mb-3">
             <div class="card-header">
@@ -213,10 +228,10 @@ if ($venuesResult) {
         </div>
 
     </main>
+
     <?php
     include "inc/footer.inc.php";
     ?>
-
 
     <?php
     // Close the database connection if it was successful

@@ -138,6 +138,16 @@
             overflow-y: auto;
         }
 
+        .alert {
+            transition: opacity 0.5s ease; /* Smooth transition for the opacity change */
+            opacity: 1; /* Start fully visible */
+        }
+        .fade-out {
+            opacity: 0; /* End state: fully transparent */
+            visibility: hidden;
+            transition: visibility 0s 0.5s, opacity 0.5s linear; /* Delay visibility change to match opacity transition */
+        }
+        
         /* Smartphones (portrait and landscape) ----------- */
 
         @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {

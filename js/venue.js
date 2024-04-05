@@ -109,3 +109,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 });
+
+// Event listener for deletion
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('.delete-booking').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            console.log(bookingId, "hi");
+            if (confirm('Are you sure you want to delete your booking?')) {
+                // Proceed to delete the booking
+                window.location.href = `venue_delete_booking.php?booking_id=${bookingId}`;
+            }
+        });
+    });
+});
+
+// Close alert
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            alert.classList.add('fade-out');
+        });
+    }, 5000); // 5 seconds until fade out
+});
