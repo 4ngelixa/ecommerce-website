@@ -1,24 +1,22 @@
 <?php
 session_start(); // Start a new session or resume the existing one
-
-// Initialize error message and success flag
-$errorMsg = '';
+error_log('Session: ' . print_r($_SESSION, true));
+$errorMsg = ''; // Initialize error message and success flag
 $success = true;
 $reviewPosted = false; // Flag to check if the review was posted
 
-// Enable error reporting for debugging (remove this in production)
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-// Prevent caching
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
+function sanitizeInput($data)
+{
+    $data = trim($data); // Strip unnecessary characters (extra space, tab, newline)
+    $data = stripslashes($data); // Remove backslashes (\)
+    $data = htmlspecialchars($data); // Convert special characters to HTML entities
+    return $data;
+}
 
 // Function to check if user is logged in
 function isLoggedIn()
 {
-    return isset($_SESSION['member_id']); // Assuming 'member_id' is set in $_SESSION when a user logs in
+    return isset($_SESSION['id']);
 }
 
 // Include dependencies
@@ -48,25 +46,21 @@ if (!$config) {
 // Handle review submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['review'])) {
     if (!isLoggedIn()) {
-        // If the user is not logged in, redirect to the login page
-        header('Location: authentication.php');
-        exit();
+        // User is not logged in, handle in JavaScript
     } else {
-        // The user is logged in, prepare to insert the review
-        $memberID = $_SESSION['member_id']; // Replace with actual session variable
-        $review = trim($_POST['review']);
-        $productID = $_POST['product_id']; // Included as a hidden input in the form
+        $memberID = $_SESSION['id'];
+        $review = sanitizeInput($_POST['review']);
+        $productID = $_POST['product_id'];
 
         if (empty($review)) {
             $errorMsg = "Review cannot be empty.";
             $success = false;
         } else {
-            // Insert the review into the database
             $insertReviewSQL = "INSERT INTO product_review (product_id, member_id, review, review_date) VALUES (?, ?, ?, NOW())";
             if ($stmt = $conn->prepare($insertReviewSQL)) {
                 $stmt->bind_param("iis", $productID, $memberID, $review);
                 if ($stmt->execute()) {
-                    $reviewPosted = true; // Set the flag to true as the review has been posted
+                    $reviewPosted = true;
                 } else {
                     $errorMsg = "Error submitting the review: " . $stmt->error;
                     $success = false;
@@ -128,7 +122,6 @@ if ($success) {
     // Close the database connection
     $conn->close();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -227,6 +220,15 @@ if ($success) {
     <?php endif; ?>
 
     <script>
+        var isLoggedIn = <?php echo json_encode(isLoggedIn()); ?>;
+        var shouldRedirect = <?php echo json_encode(!isLoggedIn() && $_SERVER['REQUEST_METHOD'] == 'POST'); ?>;
+
+        // redirect user to login before submitting product review
+        if (shouldRedirect) {
+            alert('Please log in to submit your review.');
+            window.location.href = 'authentication.php';
+        }
+
         // function to zoom product image
         function zoomImage(imageContainer) {
             var imgSrc = imageContainer.querySelector('img').src; // Get the source of the image to be zoomed
@@ -287,6 +289,41 @@ if ($success) {
 
         // Call the function initially to update the cart icon when the page loads
         updateCartIcon();
+
+        // Function to handle review form submission
+        document.querySelector('.review-form').addEventListener('submit', function (event) {
+            // Prevent form submission
+            event.preventDefault();
+
+            // Check if the user is logged in
+            if (!isLoggedIn) {
+                // If the user is not logged in, redirect to the login page
+                window.location.href = 'authentication.php';
+                return;
+            }
+
+            // If logged in, proceed with form submission
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.action);
+            xhr.onload = function () {
+                // Handle response if needed
+                if (xhr.status === 200) {
+                    alert('Your review has been posted successfully.');
+                    // Optionally reset the form or update the UI
+                    document.querySelector('.review-form').reset();
+                    // Code to refresh the reviews section can be added here
+                } else {
+                    // Handle error
+                    alert('There was an error submitting your review.');
+                }
+            };
+            xhr.onerror = function () {
+                // Handle network errors
+                alert('Network error. Please try again.');
+            };
+            xhr.send(formData);
+        });
     </script>
 
     <?php include "inc/footer.inc.php"; ?>

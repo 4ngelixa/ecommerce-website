@@ -24,11 +24,11 @@
         $success = true;
 
         //Email
-        if (empty($_POST["email"])) {
+        if (empty($_POST["email1"])) {
             $errorMsg .= "Email is required.<br>";
             $success = false;
         } else {
-            $email = sanitize_input($_POST["email"]);
+            $email = sanitize_input($_POST["email1"]);
 
             // Additional check to make sure e-mail address is well-formed.
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -63,7 +63,7 @@
                 $success = false;
             } else {
                 $pwd = sanitize_input($_POST["pwd1"]);
-                $pwd = password_hash($$_POST["pwd1"], PASSWORD_DEFAULT);
+                $pwd = password_hash($_POST["pwd1"], PASSWORD_DEFAULT);
             }
         }
         
@@ -127,7 +127,7 @@
                 );
 
                 // Prepare the statement
-                $stmt = $conn->prepare("INSERT INTO member (fname, lname, email, password) VALUES (?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO member (fname, lname, email, user_password) VALUES (?, ?, ?, ?)");
 
                 // Bind & execute the query statement
                 $stmt->bind_param("ssss", $fname, $lname, $email, $pwd);

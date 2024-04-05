@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head>
+    <title>Bling Bling</title>
     <?php include "inc/head.inc.php"; ?>
     <?php include "process_admin.php"; ?>
     <link rel="stylesheet" href="css/admin_panel.css">
@@ -75,12 +76,16 @@
                     echo "<td>" . htmlspecialchars($product['pname']) . "</td>";
                     echo "<td>
                             <form id='updatePriceForm_" . $product['product_id'] . "' onsubmit='updateProduct(" . $product['product_id'] . ", this); return false;'>
-                                <input type='number' name='price' value='" . $product['price'] . "' required>
+                            <label for='price_" . $product['product_id'] . "'>Price</label>
+                            <input type='number' id='price_" . $product['product_id'] . "' name='price' value='" . $product['price'] . "' required>
                             </form>
                           </td>";
                     echo "<td>
                             <form id='updateStockForm_" . $product['product_id'] . "' onsubmit='updateProduct(" . $product['product_id'] . ", this); return false;'>
-                                <input type='number' name='stock' value='" . $product['stock'] . "' required>
+                            <label for='stock_" . $product['product_id'] . "'>stock</label>
+
+                            <input type='number' id='stock_" . $product['product_id'] . "' name='stock' value='" . $product['stock'] . "' required>
+
                             </form>
                           </td>";
                     echo "<td>
@@ -116,30 +121,31 @@
     }
 
     function updateProduct(productId) {
-    if (confirm('Are you sure you want to update this product?')) {
-        // Get the form values
-        const priceForm = document.getElementById(`updatePriceForm_${productId}`);
-        const stockForm = document.getElementById(`updateStockForm_${productId}`);
-        const price = priceForm.elements.price.value;
-        const stock = stockForm.elements.stock.value;
+        if (confirm('Are you sure you want to update this product?')) {
+            // Get the form values
+            const priceForm = document.getElementById(`updatePriceForm_${productId}`);
+            const stockForm = document.getElementById(`updateStockForm_${productId}`);
+            const price = priceForm.elements.price.value;
+            const stock = stockForm.elements.stock.value;
 
-        // Construct the URL with the data as query parameters
-        const url = `update_product.php?productId=${productId}&price=${encodeURIComponent(price)}&stock=${encodeURIComponent(stock)}`;
+            // Construct the URL with the data as query parameters
+            const url =
+                `update_product.php?productId=${productId}&price=${encodeURIComponent(price)}&stock=${encodeURIComponent(stock)}`;
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
 
-        xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                // You may want to check for a success message in the response before confirming the update
-                alert('Product updated successfully');
-                location.reload(); // Reload the page to update the table
-            }
-        };
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // You may want to check for a success message in the response before confirming the update
+                    alert('Product updated successfully');
+                    location.reload(); // Reload the page to update the table
+                }
+            };
 
-        xhr.send();
+            xhr.send();
+        }
     }
-}
     </script>
 </body>
 
