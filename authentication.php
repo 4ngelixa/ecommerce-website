@@ -16,12 +16,14 @@
     <main class="container d-flex justify-content-center">
         <div class="login-wrap">
             <div class="login-html">
+                
                 <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign
                     In</label>
                 <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
                 <div class="login-form">
                     <form action="process_login.php" method="post">
                         <div class="sign-in-htm">
+                        <h1 class="text-center">Welcome to Bling Bling</h1>
                             <div class="group">
                                 <label for="email" class="form-label">Email:</label>
                                 <input maxlength="45" type="email" id="email" name="email" class="form-control"
@@ -38,7 +40,7 @@
                             </div>
                             <div class="hr"></div>
                             <div class="foot-lnk">
-                                <a href="forget_pass.php">Forgot Password?</a>
+                                <a href="forget_pass.php" style="color : #F2F2F2;">Forgot Password?</a>
                             </div>
                         </div>
                     </form>
