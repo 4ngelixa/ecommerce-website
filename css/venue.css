@@ -134,7 +134,7 @@
         }
 
         .scroll {
-            max-height: 100px;
+            max-height: 200px;
             overflow-y: auto;
         }
 
@@ -176,19 +176,93 @@
         }
 
         #toastContainer .toast {
-            background-color: #ffffff; /* Solid white background */
-            border: 1px solid #cccccc; /* Optional: adds a border around the toast */
+            background-color: #ffffff;
+            /* Solid white background */
+            border: 1px solid #cccccc;
+            /* Optional: adds a border around the toast */
         }
-        
+
         /* Ensures the toast is not translucent */
         #toastContainer .toast .toast-header,
         #toastContainer .toast .toast-body {
             opacity: 1;
         }
-        
+
         /* Adjust this value based on the height of your navbar */
         #toastContainer {
-            top: 60px; /* Space from the top, adjust accordingly if your navbar is taller or shorter */
-            right: 1rem; /* Margin from the right side of the viewport */
-            z-index: 1050; /* Ensure it's above most other content */
+            top: 60px;
+            /* Space from the top, adjust accordingly if your navbar is taller or shorter */
+            right: 1rem;
+            /* Margin from the right side of the viewport */
+            z-index: 1050;
+            /* Ensure it's above most other content */
+        }
+
+        #bookingTabs {
+            display: flex;
+            justify-content: center;
+        }
+
+        #calendarTabs {
+            display: flex;
+            justify-content: center;
+        }
+
+        .header-image {
+            background: linear-gradient(rgba(0, 0, 0, 0.1),
+                    rgba(0, 0, 0, 0.1)), url('../images/venue_backimage.jpg') no-repeat center center;
+            background-size: cover;
+            height: 20vh;
+            /* Adjust this value as needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 1px 1px 3px #000000;
+            /* Optional: Adds a shadow to the text for better readability */
+        }
+
+        .overlay-text {
+            font-family: math;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+        }
+
+        body {
+            background-color: #f5f5f5ea;
+            /* This is a very light grey color */
+        }
+
+        container {
+            background-color: white;
+        }
+
+        .card-img-top {
+            background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('../images/venue_backimage.jpg') no-repeat center center;
+            background-size: cover;
+            height: 5vh;
+            /* Limit height but fill width */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .intro-text p,
+        .intro-text2 p {
+            font-weight: 100;
+            font-size: 1.2rem;
+            /* Adjust size as needed */
+            line-height: 1.5;
+            /* Improve readability */
+            color: #333;
+            /* Subtle text color, adjust based on your background */
+            text-align: center;
+            /* Center align the text */
+            margin: 5px;
+            /* Space below the section */
+        }
+
+        .intro-field {
+            margin: 20px;
         }
