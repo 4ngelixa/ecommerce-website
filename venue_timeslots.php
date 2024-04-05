@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json'); // Ensure proper content-type for JSON responses
 // Create database connection
 $config = parse_ini_file('/var/www/private/db-config.ini');
 if (!$config) {
