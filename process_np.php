@@ -1,6 +1,9 @@
 
 
 <?php
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
     session_start();
     if (empty($_POST["pwd"])) {
             $errorMsg .= "Passwords are empty. They should not be empty<br>";
@@ -37,7 +40,7 @@
                     $error_msg .= "Connection failed: " . $conn->connect_error;
                 } 
                 else {
-                    $query = $conn->prepare("UPDATE member SET password=? WHERE otp=?");
+                    $query = $conn->prepare("UPDATE member SET user_password=? WHERE otp=?");
                     $query->bind_param("ss", $pwd, $otp);
                     if($query->execute()) {
                         $query->close();
@@ -46,12 +49,14 @@
                         $query_2->bind_param("s", $otp);
                         if($query_2->execute()) {
                             $query_2->close();
+                            header("Location: authentication.php");
                         }
                     }
                     else{
                         $query->close();
                         $error_msg .= "Failed to change password.";
                         echo "<script type='text/javascript'>alert('$error_msg');</script>";
+                        header("Location: authentication.php");
                     }
                     $conn->close();
                     header("Location: authentication.php");

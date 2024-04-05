@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Your Cart</title>
     <link rel="stylesheet" href="css/carts.css">
@@ -5,11 +7,6 @@
         include "inc/head.inc.php"; 
     ?>
 </head>
-
-<?php
-// Include navigation
-include "inc/nav.inc.php";
-?>
 
 <?php
 // Include database connection or any necessary initialization
@@ -115,6 +112,12 @@ $conn->close();
 ?>
 
 <body>
+
+<?php
+// Include navigation
+include "inc/nav.inc.php";
+?>
+
 <main class="container">
     <?php
     // Check if the cart is empty
@@ -138,7 +141,7 @@ $conn->close();
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Total</th>
-                            <th></th> <!-- Added a column for action -->
+                            <th>Remove</th> <!-- Added a column for action -->
                         </tr>
                     </thead>
                     <tbody>
@@ -149,13 +152,13 @@ $conn->close();
                                 </td>
                                 <td class="price">$<?= number_format((float)$product["price"], 2, '.', ''); ?></td>
                                 <td class="quantity">
-                                    <input type="number" name="quantity-<?= $product["product_id"] ?>" value="<?= $_SESSION['cart'][$product['product_id']] ?>" min="0" max="100">
+                                    <input type="number" name="quantity-<?= $product["product_id"] ?>" value="<?= $_SESSION['cart'][$product['product_id']] ?>" min="0" max="100" aria-label="Quantity">
                                 </td>
                                 <td class="price">$<?= number_format((float)$product['price'] * (int)$_SESSION['cart'][$product['product_id']], 2, '.', ''); ?></td>
                                 <td class="actions">
-                                    <button type="submit" class="remove-button" name="remove" value="<?= $product['product_id'] ?>">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                <button type="submit" class="remove-button" name="remove" value="<?= $product['product_id'] ?>" aria-label="Remove Product <?= $product['product_name'] ?>">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -191,3 +194,4 @@ include "inc/footer.inc.php";
 
 <script defer src="js/cart.js"></script>
 </body>
+</html>

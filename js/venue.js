@@ -1,53 +1,3 @@
-// // $(document).ready(function () {
-// //     // Function to fetch the calendar view based on user actions
-// //     function fetchCalendar(month, year, venueId) {
-// //         $.ajax({
-// //             url: 'build_venue.php', // Adjust according to your actual script's location
-// //             type: 'POST',
-// //             data: { month: month, year: year, venue_id: venueId },
-// //             success: function (response) {
-// //                 $('#calendarContainer').html(response); // Ensure you have this container in your HTML
-// //             },
-// //             error: function (error) {
-// //                 console.error("Error fetching calendar: ", error);
-// //             }
-// //         });
-// //     }
-
-// //     // Example of dynamically changing the month and fetching the updated calendar
-// //     $('#prevMonthBtn').on('click', function () {
-// //         // Calculate previous month and year here
-// //         fetchCalendar(newMonth, newYear, venueId); // Ensure you define these variables accordingly
-// //     });
-
-// //     $('#nextMonthBtn').on('click', function () {
-// //         // Calculate next month and year here
-// //         fetchCalendar(newMonth, newYear, venueId);
-// //     });
-
-// //     // Initial fetch for the current month and year
-// //     var currentMonth = $('#currentMonth').val();
-// //     var currentYear = $('#currentYear').val();
-// //     var venueId = 1; // Example venueId, adjust based on your application logic
-// //     fetchCalendar(currentMonth, currentYear, venueId);
-// // });
-
-// function loadTimeslots(date) {
-//     // Example: Populate modal with a message (replace with AJAX call to fetch timeslots)
-//     var modalBody = document.querySelector('#timeslotModal .modal-body');
-//     modalBody.innerHTML = 'Loading timeslots for ' + date + '...';
-
-//     // Example AJAX call (uncomment and modify URL and success function as needed)
-//     $.ajax({
-//         url: 'venue_timeslots.php', // Your endpoint to fetch timeslots
-//         type: 'GET',
-//         data: { date: date },
-//         success: function (data) {
-//             // Populate modal with returned data
-//             modalBody.innerHTML = data;
-//         }
-//     });
-// };
 
 document.addEventListener('DOMContentLoaded', (event) => {
     document.querySelectorAll("button[data-date][data-venue]").forEach(button => {
@@ -70,6 +20,7 @@ function loadTimeslots(buttonElement) {
     });
 
     const date = buttonElement.getAttribute('data-date');
+    document.querySelector('#selectedDate').value = date;
     const venueId = buttonElement.getAttribute('data-venue');
     document.querySelector('#venueId').value = venueId; // Set the hidden input's value
 
@@ -108,39 +59,48 @@ function selectTimeslot(timeslotId, element) {
 function bookTimeslots(event) {
     event.preventDefault(); // Prevent the default form submission
 
-    let selectedTimeslots = document.getElementById('selectedTimeslots').value;
+    let selectedTimeslots = document.getElementById('selectedTimeslots').value.split(',');
     let venueId = document.getElementById('venueId').value; // Retrieve venueId from the hidden input
+    let bookingDate = document.getElementById('selectedDate').value; // Retrieve the selected booking date
 
     console.log('Selected Timeslots:', selectedTimeslots);
     console.log('Venue ID:', venueId);
+    console.log('Booking Date:', bookingDate);
 
-    // Here, implement your booking logic
-    // For instance, an AJAX call to a PHP script that processes the booking
-    // Make sure to replace the URL and adjust the data structure as needed
-    fetch('process_booking.php', {
+    // AJAX call to the PHP script that processes the booking
+    fetch('venue_process_booking.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
             venueId: venueId,
-            selectedTimeslots: selectedTimeslots.split(',')
+            selectedTimeslots: selectedTimeslots,
+            bookingDate: bookingDate // Pass the booking date to the server
         }),
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            // Handle success response
-            // For example, display a confirmation message or close the modal
-            let timeslotModal = bootstrap.Modal.getInstance(document.getElementById('timeslotModal'));
-            timeslotModal.hide();
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
         })
-        .catch((error) => {
+        .then(data => {
+            // If the booking was successful, close the modal
+            if (data.success) {
+                console.log('Success:', data);
+                window.location.reload(); // Refresh the page
+            } else if (data.error) {
+                console.error('Booking Error:', data.error);
+                // Optionally, handle/display error to the user here
+            }
+        })
+        .catch(error => {
             console.error('Error:', error);
-            // Handle error response
-            // For example, display an error message to the user
+            // Handle/display error to the user here
         });
 }
+
 
 // Event listener for timeslot button clicks
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -150,3 +110,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 });
+
+// Event listener for deletion
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('.delete-booking').forEach(button => {
+        button.addEventListener('click', function () {
+            const bookingId = this.getAttribute('data-booking-id');
+            console.log(bookingId, "hi");
+            if (confirm('Are you sure you want to delete your booking?')) {
+                // Proceed to delete the booking
+                window.location.href = `venue_delete_booking.php?booking_id=${bookingId}`;
+            }
+        });
+    });
+});
+

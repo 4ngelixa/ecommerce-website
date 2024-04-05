@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <title>Bling Bling</title>
     <?php
     include "inc/head.inc.php";
     ?>
@@ -52,8 +53,8 @@
                 if (!$query->execute()) {
                     throw new Exception("Execute failed: (" . $query->errno . ") " . $query->error);
                 }else{
-                    echo "<h2>Profile Updated!</h2>";
-                    echo "<h4>Thank you for updating your profile, " . $fname . " " . $lname . ".</h4>";
+                    echo "<h1>Profile Updated!</h1>";
+                    echo "<h2>Thank you for updating your profile, " . $fname . " " . $lname . ".</h2>";
                     $_SESSION["fname"] = $fname;
                     $_SESSION["lname"] = $lname;
                     $_SESSION["phone"] = $phone;
@@ -70,4 +71,5 @@
 <?php
 include "inc/footer.inc.php";
 ?>
+
 </html>

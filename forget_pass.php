@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <link rel="stylesheet" href="css/logins.css">
     <title>Bling Bling</title>
     <?php
     include "inc/head.inc.php";
@@ -14,6 +16,7 @@
     <main class="container d-flex justify-content-center">
         <div class="login-wrap">
             <div class="login-html">
+                <h1 class="text-center">Forget Password</h1>
                 <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1"
                     class="tab"></label>
                 <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
@@ -31,7 +34,7 @@
                             </div>
                             <div class="hr"></div>
                             <div class="foot-lnk">
-                                <a href="authentication.php">Back</a>
+                                <a href="authentication.php" style="color : #F2F2F2;">Back</a>
                             </div>
                         </div>
                     </form>
