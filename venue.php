@@ -85,17 +85,28 @@ if ($venuesResult) {
         <div id="toastContainer" style="position: fixed; top: 1rem; right: 1rem;"></div>
     </div>
 
+    <!-- Background image container with overlay text -->
+    <div class="header-image">
+        <div class="overlay-text">✧ Bling Bling Badminton Halls ✧</div>
+    </div>
     <main class="container">
-        <h1 class="product-catalog-title">✧ Bling Bling Badminton Halls ✧</h1>
-        <p>At Bling Bling Badminton, we offer free usage of our facilities and badminton halls. Please place a booking
-            on the badminton hall to be used! Our courts are open from 10 AM to 6 PM daily.</p>
+        <div class="intro-field">
+            <section class="intro-text">
+                <p>At Bling Bling Badminton, we offer free usage of our facilities and badminton halls.</p>
+                <p>Badminton is meant to be enjoyed!</p>
+            </section>
+            <section class="intro-text2">
+                <p>Our courts are open from 10 AM to 6 PM daily. Please book a badminton hall in advance!</p>
+                <p>Edit your bookings or book a venue from here!</p>
+            </section>
+        </div>
         <div class="card mb-3">
             <div class="card-header">
-                Bookings Overview
+                Your Bookings
             </div>
             <div class="card-body">
                 <?php if (isset($memberId) && !empty($memberId)): ?>
-                    <ul class="nav nav-tabs" id="bookingTabs" role="tablist">
+                    <ul class="nav nav-tabs justify-content-center" id="bookingTabs" role="tablist">
                         <?php foreach ($venues as $index => $venue): ?>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link <?= $index === 0 ? 'active' : '' ?>"
@@ -152,7 +163,7 @@ if ($venuesResult) {
                                             // Wrap in a div with d-flex and justify-content-between classes for alignment
                                             echo "<li class='list-group-item d-flex justify-content-between align-items-center'>" .
                                                 htmlspecialchars($displayText) .
-                                                "<button class='btn btn-danger btn-sm delete-booking' data-booking-id='{$booking['booking_id']}'>&times;</button>" .
+                                                "<button class='btn btn-danger btn-sm delete-booking' data-booking-id='{$booking['booking_id']}'><i class='fas fa-times' aria-hidden='true'></i></button>" .
                                                 "</li>";
                                         }
 
@@ -173,8 +184,9 @@ if ($venuesResult) {
         </div>
 
         <div class="card mb-3">
+            <div class="card-img-top" alt="Venue Image"></div>
             <div class="card-header">
-                Calendar View
+                Venues
             </div>
             <div class="card-body">
                 <!-- Nav tabs for venues -->
@@ -218,7 +230,7 @@ if ($venuesResult) {
                     <div class="modal-header">
                         <h5 class="modal-title" id="timeslotModalLabel">Available Timeslots</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <i class="fas fa-times" aria-hidden="true"></i>
                         </button>
                     </div>
 
@@ -245,20 +257,9 @@ if ($venuesResult) {
     </main>
 
     <?php if (isset($_SESSION['toast'])): ?>
-        <script>
-            $(document).ready(function () {
-                var toastHTML = '<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">' +
-                    '<div class="toast-header">' +
-                    '<strong class="me-auto">Notification</strong>' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>' +
-                    '</div>' +
-                    '<div class="toast-body">' +
-                    '<?php echo $_SESSION['toast']['message']; ?>' +
-                    '</div>' +
-                    '</div>';
-
-                $('#toastContainer').append(toastHTML);
-                $('.toast').toast('show');
+        <script>         $(document).ready(function () {
+                var toastHTML = '<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">' + '<div class="toast-header">' + '<strong class="me-auto">Notification</strong>' + '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>' + '</div>' + '<div class="toast-body">' + '<?php echo $_SESSION['toast']['message']; ?>' + '</div>' + '</div>';
+                $('#toastContainer').append(toastHTML); $('.toast').toast('show');
             });
 
         </script>
@@ -287,8 +288,6 @@ function build_calendar($month, $year, $venue_id, $conn)
     // Retrieve the month and year from the session, or use the current month and year as defaults
     $month = isset($_SESSION['calendar_month']) ? $_SESSION['calendar_month'] : date('m');
     $year = isset($_SESSION['calendar_year']) ? $_SESSION['calendar_year'] : date('Y');
-
-    $venue_id = $_SESSION['venue_id']; // Assume you have venue_id stored in session or passed somehow
 
     $totalTimeslots = 8; // Assuming there are 8 timeslots available per day.
     $today = date('Y-m-d');
@@ -328,12 +327,12 @@ function build_calendar($month, $year, $venue_id, $conn)
 
 
     $calendar = "<div class='calendar-navigation' style='display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px 0;'>";
-    $calendar .= "<a class='btn btn-xs btn-success' href='?month={$prev_month}&year={$prev_year}'><i class='fa fa-arrow-left'></i></a>";
+    $calendar .= "<a class='btn btn-xs btn-primary' title='Previous Month' href='?month={$prev_month}&year={$prev_year}'><i class='fa fa-arrow-left'></i></a>";
 
     // Month and year in the center, bigger and bold
     $calendar .= "<span class='current-month-year' style='font-size: 20px; font-weight: bold;'>{$monthName} {$year}</span>";
 
-    $calendar .= "<a class='btn btn-xs btn-primary' href='?month={$next_month}&year={$next_year}'><i class='fa fa-arrow-right'></i></a>";
+    $calendar .= "<a class='btn btn-xs btn-primary' title='Next Month' href='?month={$next_month}&year={$next_year}'><i class='fa fa-arrow-right'></i></a>";
     $calendar .= "</div>";
 
     $calendar .= "<table class='table table-bordered'>";
