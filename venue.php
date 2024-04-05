@@ -253,14 +253,67 @@ if ($venuesResult) {
                 Bookings Overview
             </div>
             <div class="card-body">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" id="bookingTabs" role="tablist">
+                <?php if (isset($memberId) && !empty($memberId)): ?>
+                    <ul class="nav nav-tabs" id="bookingTabs" role="tablist">
+                        <?php foreach ($venues as $index => $venue): ?>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link <?= $index === 0 ? 'active' : '' ?>"
+                                    id="venue<?= $venue['venue_id'] ?>-tab" data-bs-toggle="tab"
+                                    data-bs-target="#venue<?= $venue['venue_id'] ?>" type="button" role="tab"
+                                    aria-controls="venue<?= $venue['venue_id'] ?>"
+                                    aria-selected="<?= $index === 0 ? 'true' : 'false' ?>">
+                                    <?= htmlspecialchars($venue['venue_name']) ?>
+                                </button>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+
+                    <div class="tab-content" id="bookingTabsContent">
+                        <?php foreach ($venues as $index => $venue): ?>
+                            <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>"
+                                id="venue<?= $venue['venue_id'] ?>" role="tabpanel"
+                                aria-labelledby="venue<?= $venue['venue_id'] ?>-tab">
+                                <ul class="list-group list-group-flush scroll">
+                                    <?php
+                                    $bookingsQuery = "SELECT booking_id, booking_date, timeslot_id FROM venue_bookings WHERE venue_id = ? AND member_id = ? ORDER BY booking_date ASC, timeslot_id ASC";
+                                    $stmt = $conn->prepare($bookingsQuery);
+                                    // Notice the addition of $memberId in bind_param() to include it in the query
+                                    $stmt->bind_param("ii", $venue['venue_id'], $memberId);
+                                    $stmt->execute();
+                                    $bookingsResult = $stmt->get_result();
+                                    if ($bookingsResult->num_rows > 0) {
+                                        while ($booking = $bookingsResult->fetch_assoc()) {
+                                            echo "<li class='list-group-item'>Booking ID: " . htmlspecialchars($booking['booking_id']) . " - Date: " . htmlspecialchars($booking['booking_date']) . " Time: </li>";
+                                        }
+                                    } else {
+                                        echo "<li class='list-group-item'>No bookings available</li>";
+                                    }
+                                    $stmt->close();
+                                    ?>
+                                </ul>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <!-- User is not logged in, display a message instead -->
+                    <p>Please Login to view your current bookings.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                Calendar View
+            </div>
+            <div class="card-body">
+                <!-- Nav tabs for venues -->
+                <ul class="nav nav-tabs" id="calendarTabs" role="tablist">
                     <?php foreach ($venues as $index => $venue): ?>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link <?= $index === 0 ? 'active' : '' ?>"
-                                id="venue<?= $venue['venue_id'] ?>-tab" data-bs-toggle="tab"
-                                data-bs-target="#venue<?= $venue['venue_id'] ?>" type="button" role="tab"
-                                aria-controls="venue<?= $venue['venue_id'] ?>"
+                                id="calendarTab<?= $venue['venue_id'] ?>-tab" data-bs-toggle="tab"
+                                data-bs-target="#calendarTab<?= $venue['venue_id'] ?>" type="button" role="tab"
+                                aria-controls="calendarTab<?= $venue['venue_id'] ?>"
                                 aria-selected="<?= $index === 0 ? 'true' : 'false' ?>">
                                 <?= htmlspecialchars($venue['venue_name']) ?>
                             </button>
@@ -268,35 +321,24 @@ if ($venuesResult) {
                     <?php endforeach; ?>
                 </ul>
 
-                <div class="tab-content" id="bookingTabsContent">
+                <!-- Tab content for each venue's calendar -->
+                <div class="tab-content" id="calendarTabsContent">
                     <?php foreach ($venues as $index => $venue): ?>
                         <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>"
-                            id="venue<?= $venue['venue_id'] ?>" role="tabpanel"
-                            aria-labelledby="venue<?= $venue['venue_id'] ?>-tab">
-                            <ul class="list-group list-group-flush scroll">
-                                <?php
-                                $bookingsQuery = "SELECT booking_id, booking_date, timeslot_id FROM venue_bookings WHERE venue_id = ?";
-                                $stmt = $conn->prepare($bookingsQuery);
-                                $stmt->bind_param("i", $venue['venue_id']);
-                                $stmt->execute();
-                                $bookingsResult = $stmt->get_result();
-                                if ($bookingsResult->num_rows > 0) {
-                                    while ($booking = $bookingsResult->fetch_assoc()) {
-                                        // Assume resolveTimeslot is a function you've written to convert timeslot_id to readable time slots
-                                        // list($startTime, $endTime) = resolveTimeslot($booking['timeslot_id']);
-                                        echo "<li class='list-group-item'>Booking ID: " . htmlspecialchars($booking['booking_id']) . " - Date: " . htmlspecialchars($booking['booking_date']) . " Time: </li>";
-                                    }
-                                } else {
-                                    echo "<li class='list-group-item'>No bookings available</li>";
-                                }
-                                $stmt->close();
-                                ?>
-                            </ul>
+                            id="calendarTab<?= $venue['venue_id'] ?>" role="tabpanel"
+                            aria-labelledby="calendarTab<?= $venue['venue_id'] ?>-tab">
+                            <?php
+                            // Assuming current month and year are set or retrieved from somewhere
+                            $month = date('m');
+                            $year = date('Y');
+                            echo build_calendar($month, $year, $venue['venue_id'], $conn);
+                            ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
             </div>
         </div>
+
 
         <div class="row">
             <?php foreach ($venues as $venue): ?>
