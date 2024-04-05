@@ -2,6 +2,7 @@
 // Initialize error message and success flag
 $errorMsg = '';
 $success = true;
+Session_start();
 
 // Create database connection
 $config = parse_ini_file('/var/www/private/db-config.ini');
