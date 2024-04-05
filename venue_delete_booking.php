@@ -24,15 +24,24 @@ if ($bookingId) {
     $stmt->execute();
     
     if ($stmt->affected_rows > 0) {
-        // Redirect back with a success message
-        header("Location: venue.php?success=Booking deleted successfully.");
+        $_SESSION['toast'] = [
+            'type' => 'success',
+            'message' => 'Booking deleted successfully.'
+        ];
+        header("Location: venue.php?");
     } else {
-        // Redirect back with an error message
-        header("Location: venue.php?error=Unable to delete booking or booking does not exist.");
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => 'Unable to delete booking or booking does not exist.'
+        ];
+        header("Location: venue.php?");
     }
 } else {
-    // Redirect back with an error message
-    header("Location: venue.php?error=No booking ID provided.");
+    $_SESSION['toast'] = [
+        'type' => 'error',
+        'message' => 'No booking ID provided..'
+    ];
+    header("Location: venue.php?");
 }
 
 $conn->close();

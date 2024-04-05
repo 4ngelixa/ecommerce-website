@@ -51,7 +51,7 @@ if ($venuesResult) {
     <?php include "inc/head.inc.php"; ?>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -64,6 +64,10 @@ if ($venuesResult) {
     <?php
     include "inc/nav.inc.php";
     ?>
+
+    <div aria-live="polite" aria-atomic="true" style="position: relative; z-index: 1050; min-height: 0px;">
+        <div id="toastContainer" style="position: fixed; top: 1rem; right: 1rem;"></div>
+    </div>
 
     <main class="container">
         <h1 class="product-catalog-title">✧ Bling Bling Badminton Halls ✧</h1>
@@ -144,18 +148,6 @@ if ($venuesResult) {
             </div>
         </div>
 
-        <?php if (isset($_GET['success'])): ?>
-            <div class="alert alert-success" role="alert">
-                <?= htmlspecialchars($_GET['success']) ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (isset($_GET['error'])): ?>
-            <div class="alert alert-danger" role="alert">
-                <?= htmlspecialchars($_GET['error']) ?>
-            </div>
-        <?php endif; ?>
-
         <div class="card mb-3">
             <div class="card-header">
                 Calendar View
@@ -226,9 +218,31 @@ if ($venuesResult) {
                 </div>
             </div>
         </div>
-
     </main>
 
+    <?php if (isset($_SESSION['toast'])): ?>
+        <script>
+            $(document).ready(function () {
+                var toastHTML = '<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">' +
+                    '<div class="toast-header">' +
+                    '<strong class="me-auto">Notification</strong>' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>' +
+                    '</div>' +
+                    '<div class="toast-body">' +
+                    '<?php echo $_SESSION['toast']['message']; ?>' +
+                    '</div>' +
+                    '</div>';
+
+                $('#toastContainer').append(toastHTML);
+                $('.toast').toast('show');
+            });
+
+        </script>
+        <?php
+        // Clear the session variable after use
+        unset($_SESSION['toast']);
+    endif;
+    ?>
     <?php
     include "inc/footer.inc.php";
     ?>

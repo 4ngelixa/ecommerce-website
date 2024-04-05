@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', (event) => {
     document.querySelectorAll("button[data-date][data-venue]").forEach(button => {
         button.addEventListener('click', function () {
@@ -113,7 +114,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 // Event listener for deletion
 document.addEventListener('DOMContentLoaded', (event) => {
     document.querySelectorAll('.delete-booking').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const bookingId = this.getAttribute('data-booking-id');
             console.log(bookingId, "hi");
             if (confirm('Are you sure you want to delete your booking?')) {
@@ -124,12 +125,3 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
-// Close alert
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(alert => {
-            alert.classList.add('fade-out');
-        });
-    }, 5000); // 5 seconds until fade out
-});
